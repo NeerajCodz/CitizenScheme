@@ -183,9 +183,9 @@ export default function LandingPage() {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30 text-foreground overflow-hidden">
       {/* Navigation - Neomorphic */}
-      <nav className="sticky top-0 z-50 neo-flat backdrop-blur-xl">
+      <nav className="sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/60 shadow-[0_12px_30px_rgba(15,23,42,0.12)]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="neo-pressed flex h-12 w-12 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">

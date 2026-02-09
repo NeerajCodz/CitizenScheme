@@ -85,11 +85,11 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
         const { yaw } = result.orientation;
         
         // Track left and right head movements using both state and ref
-        if (yaw < -0.3) {
+        if (yaw < -0.2) {
           setHasMovedLeft(true);
           hasMovedLeftRef.current = true;
         }
-        if (yaw > 0.3) {
+        if (yaw > 0.2) {
           setHasMovedRight(true);
           hasMovedRightRef.current = true;
         }
@@ -97,7 +97,7 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
         setFaceDetected(true);
         
         // Check if looking at front and liveness check is complete
-        const isValidFrontPose = Math.abs(yaw) < 0.35;
+        const isValidFrontPose = Math.abs(yaw) < 0.45;
         const livenessComplete = hasMovedLeftRef.current && hasMovedRightRef.current;
         
         // Require multiple consecutive valid frames to prevent flickering

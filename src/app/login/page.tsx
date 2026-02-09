@@ -156,7 +156,7 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       <AnimatePresence mode="wait">
         {mode === "user" ? (
           <motion.div
@@ -168,7 +168,7 @@ export default function LoginPage() {
             transition={{ duration: 0.35 }}
           >
             {/* Left: Hero content */}
-            <div className="hidden lg:flex lg:w-1/2 border-r border-border/40 bg-muted/20">
+            <div className="hidden lg:flex lg:w-1/2 border-r border-white/60 bg-white/50 backdrop-blur-xl">
               <HeroPanel />
             </div>
             {/* Right: Login form */}
@@ -190,7 +190,7 @@ export default function LoginPage() {
               <LoginPanel isOrg />
             </div>
             {/* Right: Hero content (for org) */}
-            <div className="hidden lg:flex lg:w-1/2 border-l border-border/40 bg-muted/20">
+            <div className="hidden lg:flex lg:w-1/2 border-l border-white/60 bg-white/50 backdrop-blur-xl">
               <HeroPanel forOrg />
             </div>
           </motion.div>

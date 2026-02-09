@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 import Link from "next/link";
 
 interface Scheme {
@@ -29,7 +30,7 @@ interface Scheme {
 }
 
 export default function SchemesPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [schemes, setSchemes] = useState<Scheme[]>([]);
   const [filteredSchemes, setFilteredSchemes] = useState<Scheme[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,6 +38,7 @@ export default function SchemesPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedType, setSelectedType] = useState<string>("all");
   const [categories, setCategories] = useState<string[]>([]);
+  const [categorySamples, setCategorySamples] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchSchemes();
@@ -44,7 +46,7 @@ export default function SchemesPage() {
 
   useEffect(() => {
     filterSchemes();
-  }, [searchQuery, selectedCategory, selectedType, schemes]);
+  }, [searchQuery, selectedCategory, selectedType, schemes, i18n.language]);
 
   async function fetchSchemes() {
     try {
@@ -90,6 +92,14 @@ export default function SchemesPage() {
           new Set(data.map((s) => s.category).filter(Boolean))
         );
         setCategories(uniqueCategories);
+
+        const sampleMap: Record<string, string> = {};
+        data.forEach((s) => {
+          if (s.category && !sampleMap[s.category]) {
+            sampleMap[s.category] = s.id;
+          }
+        });
+        setCategorySamples(sampleMap);
       }
     } catch (error) {
       console.error("Failed to fetch schemes:", error);
@@ -104,13 +114,19 @@ export default function SchemesPage() {
     // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (scheme) =>
-          scheme.scheme_name.toLowerCase().includes(query) ||
-          scheme.description?.toLowerCase().includes(query) ||
-          scheme.category?.toLowerCase().includes(query) ||
-          scheme.department?.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter((scheme) => {
+        const name = tDb(t, "schemes", scheme.id, "scheme_name", scheme.scheme_name);
+        const description = tDb(t, "schemes", scheme.id, "description", scheme.description || "");
+        const category = tDb(t, "schemes", scheme.id, "category", scheme.category || "");
+        const department = tDb(t, "schemes", scheme.id, "department", scheme.department || "");
+
+        return (
+          name.toLowerCase().includes(query) ||
+          description.toLowerCase().includes(query) ||
+          category.toLowerCase().includes(query) ||
+          department.toLowerCase().includes(query)
+        );
+      });
     }
 
     // Category filter
@@ -145,7 +161,7 @@ export default function SchemesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       <Header />
 
       {/* Hero Section */}
@@ -168,7 +184,7 @@ export default function SchemesPage() {
       </section>
 
       {/* Search & Filters */}
-      <section className="sticky top-20 z-40 bg-background/95 backdrop-blur-md border-b py-4">
+      <section className="sticky top-20 z-40 bg-white/70 backdrop-blur-xl border-b border-white/60 py-4">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Search */}
@@ -191,7 +207,9 @@ export default function SchemesPage() {
               <option value="all">All Categories</option>
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat}
+                  {categorySamples[cat]
+                    ? tDb(t, "schemes", categorySamples[cat], "category", cat)
+                    : cat}
                 </option>
               ))}
             </select>
@@ -294,27 +312,33 @@ export default function SchemesPage() {
 
                         <div className="mt-8 space-y-4">
                           <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 group-hover:translate-x-1 duration-300">
-                            {scheme.scheme_name}
+                            {tDb(t, "schemes", scheme.id, "scheme_name", scheme.scheme_name)}
                           </h3>
 
                           <p className="text-sm text-muted-foreground line-clamp-3 group-hover:text-foreground transition-colors duration-300">
-                            {scheme.description || "Government welfare scheme for eligible citizens."}
+                            {tDb(
+                              t,
+                              "schemes",
+                              scheme.id,
+                              "description",
+                              scheme.description || "Government welfare scheme for eligible citizens."
+                            )}
                           </p>
 
                           <div className="flex flex-wrap gap-2">
                             <Badge variant="secondary" className="text-xs group-hover:scale-105 transition-transform duration-300">
-                              {scheme.category}
+                              {tDb(t, "schemes", scheme.id, "category", scheme.category)}
                             </Badge>
                             {scheme.state && (
                               <Badge variant="outline" className="text-xs group-hover:scale-105 transition-transform duration-300">
-                                {scheme.state}
+                                {tDb(t, "schemes", scheme.id, "state", scheme.state)}
                               </Badge>
                             )}
                           </div>
 
                           {scheme.department && (
                             <p className="text-xs text-muted-foreground line-clamp-1 pt-2 border-t group-hover:text-foreground transition-colors duration-300">
-                              {scheme.department}
+                              {tDb(t, "schemes", scheme.id, "department", scheme.department)}
                             </p>
                           )}
                         </div>

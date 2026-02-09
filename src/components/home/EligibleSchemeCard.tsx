@@ -5,9 +5,13 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, TrendingUp, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 
 interface EligibleSchemeCardProps {
   scheme: {
+    id?: string;
     slug: string;
     scheme_name: string;
     description: string;
@@ -22,6 +26,14 @@ export function EligibleSchemeCard({
   scheme,
   index,
 }: EligibleSchemeCardProps) {
+  const { t } = useTranslation();
+  const schemeId = scheme.id || scheme.slug || scheme.scheme_name;
+  const name = tDb(t, "schemes", schemeId, "scheme_name", scheme.scheme_name);
+  const description = tDb(t, "schemes", schemeId, "description", scheme.description);
+  const benefits = scheme.benefits
+    ? tDb(t, "schemes", schemeId, "benefits", scheme.benefits)
+    : "";
+  const category = tDb(t, "schemes", schemeId, "category", scheme.category);
   const score = scheme.eligibility_score || 85;
 
   return (
@@ -48,7 +60,7 @@ export function EligibleSchemeCard({
             >
               <div className="bg-linear-to-br from-green-500 to-green-600 text-white px-3 py-1 rounded-full font-bold text-sm flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
-                {score}% Match
+                {score}% {t("common.match")}
               </div>
             </motion.div>
           </div>
@@ -66,25 +78,25 @@ export function EligibleSchemeCard({
               </motion.div>
               <div className="flex-1">
                 <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
-                  {scheme.scheme_name}
+                  {name}
                 </h3>
                 <Badge className="bg-primary/10 text-primary border-primary/20">
-                  {scheme.category}
+                  {category}
                 </Badge>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-sm text-muted-foreground line-clamp-3">
-              {scheme.description}
+              {description}
             </p>
 
             {/* Benefits */}
-            {scheme.benefits && (
+            {benefits && (
               <div className="pt-3 border-t border-border/50">
                 <p className="text-xs text-muted-foreground line-clamp-2">
-                  <span className="font-semibold text-primary">Key Benefit:</span>{" "}
-                  {scheme.benefits.split('.')[0]}
+                  <span className="font-semibold text-primary">{t("common.keyBenefit")}:</span>{" "}
+                  {benefits.split(".")[0]}
                 </p>
               </div>
             )}
@@ -94,7 +106,7 @@ export function EligibleSchemeCard({
               whileHover={{ x: 5 }}
               className="flex items-center gap-2 text-primary font-medium text-sm pt-2"
             >
-              Apply Now
+              {t("common.applyNow")}
               <ArrowRight className="w-4 h-4" />
             </motion.div>
           </div>

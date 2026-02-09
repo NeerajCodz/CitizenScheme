@@ -24,7 +24,7 @@ export function Footer() {
       { href: "/schemes?category=women", label: t("footer.women") || "Women Welfare" },
     ],
     support: [
-      { href: "/help", label: t("footer.help") || "Help Center" },
+      { href: "/chat", label: t("footer.help") || "Help Center" },
       { href: "/faq", label: t("footer.faq") || "FAQ" },
       { href: "/contact", label: t("footer.contact") || "Contact Us" },
       { href: "/privacy", label: t("footer.privacy") || "Privacy Policy" },
@@ -61,7 +61,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative bg-gradient-to-br from-orange-50 via-background to-green-50 border-t mt-20">
+    <footer className="relative bg-linear-to-br from-white/60 via-white/40 to-white/60 border-t border-white/60 mt-20">
       {/* Wave Divider */}
       <div className="absolute top-0 left-0 right-0 -translate-y-full">
         <svg
@@ -71,7 +71,7 @@ export function Footer() {
         >
           <path
             d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,0L0,0Z"
-            className="fill-orange-50"
+            className="fill-white/80"
           />
         </svg>
       </div>

@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { MessageCircle, X, Send, Paperclip, RotateCcw, Loader2, FileText, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ChatMessage {
   id: string;
@@ -13,8 +16,14 @@ interface ChatMessage {
   created_at?: string;
 }
 
-export default function Chatbot() {
-  const [open, setOpen] = useState(false);
+interface ChatbotProps {
+  mode?: "floating" | "page";
+  containerClassName?: string;
+}
+
+export default function Chatbot({ mode = "floating", containerClassName }: ChatbotProps) {
+  const isPage = mode === "page";
+  const [open, setOpen] = useState(isPage);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -194,42 +203,62 @@ export default function Chatbot() {
     }
   };
 
-  // Format message content with basic markdown-like rendering
-  const formatContent = (text: string) => {
-    return text.split("\n").map((line, i) => {
-      // Bold
-      const formatted = line.replace(
-        /\*\*(.*?)\*\*/g,
-        '<strong>$1</strong>'
-      );
-      return (
-        <span
-          key={i}
-          dangerouslySetInnerHTML={{ __html: formatted }}
-          className="block"
-        />
-      );
-    });
+  const markdownComponents = {
+    p: (props: ComponentPropsWithoutRef<"p">) => (
+      <p className="text-sm leading-relaxed" {...props} />
+    ),
+    a: (props: ComponentPropsWithoutRef<"a">) => (
+      <a className="underline underline-offset-2" target="_blank" rel="noreferrer" {...props} />
+    ),
+    code: (props: ComponentPropsWithoutRef<"code">) => (
+      <code className="rounded bg-black/10 px-1 py-0.5 text-xs" {...props} />
+    ),
+    pre: (props: ComponentPropsWithoutRef<"pre">) => (
+      <pre className="rounded-lg bg-black/10 p-2 text-xs overflow-x-auto" {...props} />
+    ),
+    ul: (props: ComponentPropsWithoutRef<"ul">) => (
+      <ul className="list-disc pl-4 text-sm" {...props} />
+    ),
+    ol: (props: ComponentPropsWithoutRef<"ol">) => (
+      <ol className="list-decimal pl-4 text-sm" {...props} />
+    ),
+    li: (props: ComponentPropsWithoutRef<"li">) => (
+      <li className="mb-1" {...props} />
+    ),
+    strong: (props: ComponentPropsWithoutRef<"strong">) => (
+      <strong className="font-semibold" {...props} />
+    ),
+    em: (props: ComponentPropsWithoutRef<"em">) => (
+      <em className="italic" {...props} />
+    ),
   };
 
   return (
     <>
       {/* Floating Chat Button */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
-        aria-label={open ? "Close chat" : "Open chat"}
-      >
-        {open ? (
-          <X className="h-6 w-6" />
-        ) : (
-          <MessageCircle className="h-6 w-6" />
-        )}
-      </button>
+      {!isPage && (
+        <button
+          onClick={() => setOpen(!open)}
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
+          aria-label={open ? "Close chat" : "Open chat"}
+        >
+          {open ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <MessageCircle className="h-6 w-6" />
+          )}
+        </button>
+      )}
 
       {/* Chat Window */}
       {open && (
-        <div className="fixed bottom-24 right-6 z-50 flex h-130 w-95 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl sm:w-105">
+        <div
+          className={
+            isPage
+              ? `flex h-[calc(100vh-180px)] w-full flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-2xl ${containerClassName || ""}`
+              : "fixed bottom-24 right-6 z-50 flex h-130 w-95 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl sm:w-105"
+          }
+        >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border bg-primary/5 px-4 py-3">
             <div className="flex items-center gap-2">
@@ -305,7 +334,9 @@ export default function Chatbot() {
                         : "bg-muted rounded-bl-md"
                     }`}
                   >
-                    {formatContent(msg.content)}
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                      {msg.content}
+                    </ReactMarkdown>
                     {msg.attachments && msg.attachments.length > 0 && (
                       <div className="mt-2 space-y-1">
                         {msg.attachments.map((att) => (

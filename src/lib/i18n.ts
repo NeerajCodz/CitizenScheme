@@ -32,7 +32,7 @@ const resources = {
       "common.applyNow": "Apply Now",
       "common.benefits": "Benefits",
       "common.keyBenefit": "Key Benefit",
-      "common.match": "Match",
+      "common.match": "match",
       "common.loading": "Loading...",
       "common.logout": "Logout",
 

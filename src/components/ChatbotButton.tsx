@@ -1,69 +1,152 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Bot, User as UserIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export function ChatbotButton() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Array<{ role: "user" | "bot"; content: string }>>([
-    {
-      role: "bot",
-      content: t("chatbot.welcome") || "Hello! I'm here to help you find the perfect government scheme. How can I assist you today?",
-    },
-  ]);
+  const getWelcome = () =>
+    t("chatbot.welcome", {
+      defaultValue:
+        "Hello! I'm here to help you find the perfect government scheme. How can I assist you today?",
+    });
+  const [messages, setMessages] = useState<Array<{ role: "user" | "assistant"; content: string }>>([]);
+  const [threadId, setThreadId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
   const [input, setInput] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const shouldAutoScrollRef = useRef(true);
 
-  const handleSend = async () => {
-    if (!input.trim()) return;
+  const initChat = useCallback(async () => {
+    if (threadId) return;
+    setLoading(true);
+    try {
+      const res = await fetch("/api/chat");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setThreadId(data.thread_id);
 
-    const userMessage = input.trim();
+      if (data.messages?.length) {
+        setMessages(
+          data.messages.map((m: { role: "user" | "assistant"; content: string }) => ({
+            role: m.role,
+            content: m.content,
+          }))
+        );
+      } else {
+        setMessages([{ role: "assistant", content: getWelcome() }]);
+      }
+    } catch {
+      setMessages([{ role: "assistant", content: getWelcome() }]);
+    } finally {
+      setLoading(false);
+    }
+  }, [threadId]);
+
+  const handleSend = async (override?: string) => {
+    const content = (override ?? input).trim();
+    if (!content || !threadId || sending) return;
+
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
-    setIsTyping(true);
+    setSending(true);
 
-    // Simulate AI response (replace with actual API call)
-    setTimeout(() => {
-      const botResponse = generateResponse(userMessage);
-      setMessages((prev) => [...prev, { role: "bot", content: botResponse }]);
-      setIsTyping(false);
-    }, 1500);
-  };
+    const optimistic = { role: "user" as const, content };
+    setMessages((prev) => [...prev, optimistic]);
 
-  const generateResponse = (message: string): string => {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes("education") || lowerMessage.includes("student")) {
-      return t("chatbot.education") || "I can help you with educational schemes! We have scholarships, skill development programs, and student welfare schemes. Would you like to see schemes for a specific education level?";
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content, thread_id: threadId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: data.content },
+      ]);
+    } catch {
+      setMessages((prev) => prev.filter((m) => m !== optimistic));
+      setInput(content);
+    } finally {
+      setSending(false);
     }
-    if (lowerMessage.includes("health") || lowerMessage.includes("medical")) {
-      return t("chatbot.health") || "I found several health-related schemes! These include health insurance, medical assistance, and wellness programs. Would you like to know more about a specific health scheme?";
-    }
-    if (lowerMessage.includes("agriculture") || lowerMessage.includes("farmer")) {
-      return t("chatbot.agriculture") || "Great! We have multiple agriculture and farmer welfare schemes including crop insurance, subsidies, and equipment support. What aspect of agriculture are you interested in?";
-    }
-    if (lowerMessage.includes("women") || lowerMessage.includes("girl")) {
-      return t("chatbot.women") || "We have dedicated women empowerment schemes covering financial assistance, skill training, and entrepreneurship support. Let me help you find the right one!";
-    }
-    if (lowerMessage.includes("eligibility") || lowerMessage.includes("eligible")) {
-      return t("chatbot.eligibility") || "To check your eligibility, I'll need some basic information. Have you completed your profile? You can also browse schemes and see your eligibility score for each one!";
-    }
-    
-    return t("chatbot.default") || "I understand you're looking for information about government schemes. Could you please tell me more about your specific needs or the category you're interested in? (Education, Health, Agriculture, Women Welfare, etc.)";
   };
 
   const quickActions = [
-    { label: t("chatbot.findSchemes") || "Find Schemes", icon: "🔍" },
-    { label: t("chatbot.checkEligibility") || "Check Eligibility", icon: "✓" },
-    { label: t("chatbot.howToApply") || "How to Apply", icon: "📝" },
-    { label: t("chatbot.trackApplication") || "Track Application", icon: "📍" },
+    { label: t("chatbot.findSchemes", { defaultValue: "Find Schemes" }), icon: "🔍" },
+    { label: t("chatbot.checkEligibility", { defaultValue: "Check Eligibility" }), icon: "✓" },
+    { label: t("chatbot.howToApply", { defaultValue: "How to Apply" }), icon: "📝" },
+    { label: t("chatbot.trackApplication", { defaultValue: "Track Application" }), icon: "📍" },
   ];
+
+  useEffect(() => {
+    if (isOpen) initChat();
+  }, [isOpen, initChat]);
+
+  useEffect(() => {
+    setMessages((prev) => {
+      if (prev.length === 1 && prev[0].role === "assistant") {
+        return [{ ...prev[0], content: getWelcome() }];
+      }
+      return prev;
+    });
+  }, [i18n.language]);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+    shouldAutoScrollRef.current = distance < 120;
+  }, []);
+
+  useEffect(() => {
+    if (shouldAutoScrollRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, sending, loading]);
+
+  const markdownComponents = {
+    p: (props: ComponentPropsWithoutRef<"p">) => (
+      <p className="text-sm leading-relaxed" {...props} />
+    ),
+    a: (props: ComponentPropsWithoutRef<"a">) => (
+      <a className="underline underline-offset-2" target="_blank" rel="noreferrer" {...props} />
+    ),
+    code: (props: ComponentPropsWithoutRef<"code">) => (
+      <code className="rounded bg-black/10 px-1 py-0.5 text-xs" {...props} />
+    ),
+    pre: (props: ComponentPropsWithoutRef<"pre">) => (
+      <pre className="rounded-lg bg-black/10 p-2 text-xs overflow-x-auto" {...props} />
+    ),
+    ul: (props: ComponentPropsWithoutRef<"ul">) => (
+      <ul className="list-disc pl-4 text-sm" {...props} />
+    ),
+    ol: (props: ComponentPropsWithoutRef<"ol">) => (
+      <ol className="list-decimal pl-4 text-sm" {...props} />
+    ),
+    li: (props: ComponentPropsWithoutRef<"li">) => (
+      <li className="mb-1" {...props} />
+    ),
+    strong: (props: ComponentPropsWithoutRef<"strong">) => (
+      <strong className="font-semibold" {...props} />
+    ),
+    em: (props: ComponentPropsWithoutRef<"em">) => (
+      <em className="italic" {...props} />
+    ),
+  };
 
   return (
     <>
@@ -91,14 +174,14 @@ export function ChatbotButton() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-green-500 blur-md"
+              className="absolute inset-0 rounded-full bg-green-500/70 blur-md"
             />
           )}
           
           <Button
             onClick={() => setIsOpen(!isOpen)}
             size="lg"
-            className="relative h-16 w-16 rounded-full neo-flat hover:neo-pressed transition-all shadow-xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 hover:from-orange-600 hover:to-orange-800 border-2 border-white/20"
+            className="relative h-16 w-16 rounded-full neo-flat hover:neo-pressed transition-all shadow-xl bg-green-600 hover:bg-green-700 border-2 border-white/20"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -142,32 +225,41 @@ export function ChatbotButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-28 right-6 w-96 max-w-[calc(100vw-3rem)] z-40"
+            className="fixed bottom-24 right-4 z-40 w-[min(420px,calc(100vw-2rem))]"
           >
             <div className="neo-flat rounded-3xl overflow-hidden shadow-2xl border-2 border-white/50">
               {/* Header */}
-              <div className="bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 p-4 text-white">
+              <div className="bg-gradient-to-r from-green-600 via-green-600 to-green-700 p-4 text-white">
                 <div className="flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ duration: 2, repeat: Infinity }}
-                    className="h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                    className="h-12 w-12 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center"
                   >
                     <Bot className="h-7 w-7" />
                   </motion.div>
                   <div>
                     <h3 className="font-bold text-lg">
-                      {t("chatbot.title") || "Scheme Assistant"}
+                      {t("chatbot.title", { defaultValue: "Scheme Assistant" })}
                     </h3>
                     <p className="text-xs text-white/80">
-                      {t("chatbot.status") || "Online • Ready to help"}
+                      {t("chatbot.status", { defaultValue: "Online • Ready to help" })}
                     </p>
                   </div>
                 </div>
               </div>
 
               {/* Messages */}
-              <div className="h-96 overflow-y-auto p-4 bg-gradient-to-b from-orange-50/30 to-background space-y-4">
+              <div
+                ref={scrollContainerRef}
+                onScroll={handleScroll}
+                className="max-h-[calc(100vh-20rem)] overflow-y-auto p-4 bg-gradient-to-b from-green-50/40 to-background space-y-4 neo-scrollbar"
+              >
+                {loading && (
+                  <div className="text-center text-sm text-muted-foreground">
+                    {t("common.loading", { defaultValue: "Loading..." })}
+                  </div>
+                )}
                 {messages.map((msg, idx) => (
                   <motion.div
                     key={idx}
@@ -178,12 +270,12 @@ export function ChatbotButton() {
                   >
                     <div
                       className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        msg.role === "bot"
-                          ? "bg-gradient-to-br from-orange-400 to-orange-600"
-                          : "bg-gradient-to-br from-green-500 to-green-600 neo-flat"
+                        msg.role === "assistant"
+                          ? "bg-gradient-to-br from-green-500 to-green-700"
+                          : "bg-gradient-to-br from-emerald-500 to-emerald-600 neo-flat"
                       }`}
                     >
-                      {msg.role === "bot" ? (
+                      {msg.role === "assistant" ? (
                         <Bot className="h-5 w-5 text-white" />
                       ) : (
                         <UserIcon className="h-5 w-5 text-white" />
@@ -191,23 +283,25 @@ export function ChatbotButton() {
                     </div>
                     <div
                       className={`max-w-[75%] rounded-2xl p-3 ${
-                        msg.role === "bot"
+                        msg.role === "assistant"
                           ? "neo-flat rounded-tl-none"
-                          : "bg-gradient-to-br from-green-500 to-green-600 text-white rounded-tr-none shadow-md"
+                          : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-tr-none shadow-md"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed">{msg.content}</p>
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                        {msg.content}
+                      </ReactMarkdown>
                     </div>
                   </motion.div>
                 ))}
 
-                {isTyping && (
+                {sending && (
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="flex gap-3"
                   >
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center">
                       <Bot className="h-5 w-5 text-white" />
                     </div>
                     <div className="neo-flat rounded-2xl rounded-tl-none p-3">
@@ -221,25 +315,25 @@ export function ChatbotButton() {
                               repeat: Infinity,
                               delay: i * 0.2,
                             }}
-                            className="h-2 w-2 rounded-full bg-orange-500"
+                            className="h-2 w-2 rounded-full bg-green-600"
                           />
                         ))}
                       </div>
                     </div>
                   </motion.div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
 
               {/* Quick Actions */}
-              <div className="p-3 bg-orange-50/50 border-t flex gap-2 overflow-x-auto">
+              <div className="p-3 bg-green-50/40 border-t flex gap-2 overflow-x-auto">
                 {quickActions.map((action) => (
                   <motion.button
                     key={action.label}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => {
-                      setInput(action.label);
-                      handleSend();
+                      handleSend(action.label);
                     }}
                     className="flex-shrink-0 px-3 py-2 rounded-xl neo-flat text-xs font-medium hover:neo-pressed transition-all"
                   >
@@ -261,15 +355,16 @@ export function ChatbotButton() {
                         handleSend();
                       }
                     }}
-                    placeholder={t("chatbot.placeholder") || "Type your message..."}
-                    className="resize-none rounded-2xl neo-pressed border-0 focus-visible:ring-2 focus-visible:ring-orange-500"
+                    placeholder={t("chatbot.placeholder", { defaultValue: "Type your message..." })}
+                    className="resize-none rounded-2xl neo-pressed border-0 focus-visible:ring-2 focus-visible:ring-green-600"
                     rows={2}
                   />
                   <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <Button
-                      onClick={handleSend}
+                      onClick={() => handleSend()}
                       size="icon"
-                      className="h-full rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg"
+                      disabled={sending || loading || !threadId}
+                      className="h-full rounded-2xl bg-gradient-to-br from-green-600 to-green-700 hover:from-green-600 hover:to-green-800 shadow-lg"
                     >
                       <Send className="h-5 w-5" />
                     </Button>

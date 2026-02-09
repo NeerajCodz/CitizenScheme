@@ -5,9 +5,13 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { FileText, MapPin, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 
 interface SchemeCardProps {
   scheme: {
+    id?: string;
     slug: string;
     scheme_name: string;
     description: string;
@@ -20,6 +24,24 @@ interface SchemeCardProps {
 }
 
 export function SchemeCard({ scheme, index }: SchemeCardProps) {
+  const { t } = useTranslation();
+  const schemeId = scheme.id || scheme.slug || scheme.scheme_name;
+  const name = tDb(t, "schemes", schemeId, "scheme_name", scheme.scheme_name);
+  const description = tDb(
+    t,
+    "schemes",
+    schemeId,
+    "description",
+    scheme.description || "Government welfare scheme for eligible citizens."
+  );
+  const category = tDb(t, "schemes", schemeId, "category", scheme.category);
+  const state = scheme.state
+    ? tDb(t, "schemes", schemeId, "state", scheme.state)
+    : null;
+  const department = scheme.department
+    ? tDb(t, "schemes", schemeId, "department", scheme.department)
+    : null;
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -45,16 +67,16 @@ export function SchemeCard({ scheme, index }: SchemeCardProps) {
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
                 <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
-                  {scheme.scheme_name}
+                  {name}
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="text-xs">
-                    {scheme.category}
+                    {category}
                   </Badge>
-                  {scheme.state && (
+                  {state && (
                     <Badge variant="outline" className="text-xs flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
-                      {scheme.state}
+                      {state}
                     </Badge>
                   )}
                 </div>
@@ -69,14 +91,14 @@ export function SchemeCard({ scheme, index }: SchemeCardProps) {
 
             {/* Description */}
             <p className="text-sm text-muted-foreground line-clamp-3">
-              {scheme.description || "Government welfare scheme for eligible citizens."}
+              {description}
             </p>
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-2 border-t border-border/50">
-              {scheme.department && (
+              {department && (
                 <p className="text-xs text-muted-foreground line-clamp-1 flex-1">
-                  {scheme.department}
+                  {department}
                 </p>
               )}
               {scheme.official_website && (

@@ -5,6 +5,9 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 
 interface FeaturedSchemeCardProps {
   scheme: {
@@ -24,6 +27,23 @@ export function FeaturedSchemeCard({
   scheme,
   index,
 }: FeaturedSchemeCardProps) {
+  const { t } = useTranslation();
+  const schemeId = scheme.id || scheme.slug || scheme.scheme_name;
+  const name = tDb(t, "schemes", schemeId, "scheme_name", scheme.scheme_name);
+  const description = tDb(
+    t,
+    "schemes",
+    schemeId,
+    "description",
+    scheme.description || "Discover the benefits of this government welfare scheme."
+  );
+  const benefits = scheme.benefits
+    ? tDb(t, "schemes", schemeId, "benefits", scheme.benefits)
+    : "";
+  const category = tDb(t, "schemes", schemeId, "category", scheme.category);
+  const state = scheme.state
+    ? tDb(t, "schemes", schemeId, "state", scheme.state)
+    : null;
   // Use gradient background instead of external logo service
   const gradients = [
     "from-orange-400 to-orange-600",
@@ -51,23 +71,23 @@ export function FeaturedSchemeCard({
           <div className={`relative h-48 overflow-hidden bg-linear-to-br ${gradientClass}`}>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-white/90 text-6xl font-bold">
-                {scheme.scheme_name.charAt(0)}
+                {name.charAt(0)}
               </div>
             </div>
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
             
             {/* Category Badge */}
             <div className="absolute top-4 left-4">
-              <Badge className="bg-primary text-primary-foreground font-semibold px-3 py-1">
-                {scheme.category}
+                <Badge className="bg-primary text-primary-foreground font-semibold px-3 py-1">
+                  {category}
               </Badge>
             </div>
 
             {/* State Badge */}
-            {scheme.state && (
+            {state && (
               <div className="absolute top-4 right-4">
                 <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm neo-flat border-0">
-                  {scheme.state}
+                  {state}
                 </Badge>
               </div>
             )}
@@ -82,19 +102,19 @@ export function FeaturedSchemeCard({
           <div className="p-6 space-y-4">
             <div>
               <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
-                {scheme.scheme_name}
+                {name}
               </h3>
               <p className="text-sm text-muted-foreground line-clamp-3">
-                {scheme.description || "Discover the benefits of this government welfare scheme."}
+                {description}
               </p>
             </div>
 
             {/* Benefits Preview */}
-            {scheme.benefits && (
+            {benefits && (
               <div className="pt-2 border-t border-border/50">
                 <p className="text-xs text-muted-foreground line-clamp-2">
-                  <span className="font-semibold text-primary">Benefits:</span>{" "}
-                  {scheme.benefits}
+                  <span className="font-semibold text-primary">{t("common.benefits")}:</span>{" "}
+                  {benefits}
                 </p>
               </div>
             )}
@@ -107,7 +127,7 @@ export function FeaturedSchemeCard({
                   whileTap={{ scale: 0.95 }}
                   className="w-full bg-primary text-primary-foreground px-4 py-2.5 rounded-lg font-medium text-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
                 >
-                  View Details
+                  {t("common.viewDetails")}
                   <ArrowRight className="w-4 h-4" />
                 </motion.button>
               </Link>

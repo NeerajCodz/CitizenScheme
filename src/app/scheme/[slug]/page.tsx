@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback, use } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,10 +33,9 @@ import {
 } from "lucide-react";
 import type { SchemeRecommendation } from "@/lib/types";
 
-const Chatbot = dynamic(
-  () => import("@/components/chatbot/Chatbot"),
-  { ssr: false }
-);
+const Chatbot = dynamic(() => import("@/components/chatbot/Chatbot"), {
+  ssr: false,
+});
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -42,6 +44,7 @@ interface PageProps {
 export default function SchemeDetailPage({ params }: PageProps) {
   const { slug } = use(params);
   const router = useRouter();
+  const { t } = useTranslation();
   const [scheme, setScheme] = useState<SchemeRecommendation | null>(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -50,7 +53,6 @@ export default function SchemeDetailPage({ params }: PageProps) {
 
   const fetchScheme = useCallback(async () => {
     try {
-      // Check if user is admin
       const adminRes = await fetch("/api/admin/users");
       if (adminRes.ok) {
         setIsAdmin(true);
@@ -81,6 +83,14 @@ export default function SchemeDetailPage({ params }: PageProps) {
 
   const handleApply = async () => {
     if (!scheme) return;
+    if (scheme.scheme_type === "government") {
+      if (scheme.official_website) {
+        window.open(scheme.official_website, "_blank", "noopener,noreferrer");
+      } else {
+        toast.error("Official website not available");
+      }
+      return;
+    }
     setApplying(true);
     try {
       const res = await fetch("/api/applications", {
@@ -110,10 +120,34 @@ export default function SchemeDetailPage({ params }: PageProps) {
 
   if (!scheme) return null;
 
+  const schemeId = scheme.id || scheme.slug || scheme.scheme_name;
+  const name = tDb(t, "schemes", schemeId, "scheme_name", scheme.scheme_name);
+  const description = tDb(
+    t,
+    "schemes",
+    schemeId,
+    "description",
+    scheme.description
+  );
+  const benefits = tDb(t, "schemes", schemeId, "benefits", scheme.benefits);
+  const category = tDb(t, "schemes", schemeId, "category", scheme.category);
+  const state = scheme.state
+    ? tDb(t, "schemes", schemeId, "state", scheme.state)
+    : null;
+  const applicationProcess = scheme.application_process
+    ? tDb(
+        t,
+        "schemes",
+        schemeId,
+        "application_process",
+        scheme.application_process
+      )
+    : null;
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
+      <nav className="sticky top-0 z-50 border-b border-white/60 bg-white/70 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-4xl items-center px-4">
           <Button variant="ghost" size="sm" onClick={() => router.back()}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back
@@ -125,14 +159,22 @@ export default function SchemeDetailPage({ params }: PageProps) {
         {/* Header */}
         <div className="mb-6">
           <div className="flex flex-wrap items-center gap-2 mb-2">
-            <Badge variant={scheme.eligibility_score >= 80 ? "success" : scheme.eligibility_score >= 50 ? "warning" : "secondary"}>
+            <Badge
+              variant={
+                scheme.eligibility_score >= 80
+                  ? "success"
+                  : scheme.eligibility_score >= 50
+                    ? "warning"
+                    : "secondary"
+              }
+            >
               {scheme.eligibility_score}% match
             </Badge>
-            <Badge variant="outline">{scheme.category}</Badge>
+            <Badge variant="outline">{category}</Badge>
             {scheme.state ? (
               <Badge variant="outline">
                 <MapPin className="mr-1 h-3 w-3" />
-                {scheme.state}
+                {state}
               </Badge>
             ) : (
               <Badge variant="outline">
@@ -141,10 +183,8 @@ export default function SchemeDetailPage({ params }: PageProps) {
               </Badge>
             )}
           </div>
-          <h1 className="text-3xl font-bold">{scheme.scheme_name}</h1>
-          <p className="mt-2 text-lg text-muted-foreground">
-            {scheme.description}
-          </p>
+          <h1 className="text-3xl font-bold">{name}</h1>
+          <p className="mt-2 text-lg text-muted-foreground">{description}</p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
@@ -156,7 +196,7 @@ export default function SchemeDetailPage({ params }: PageProps) {
                 <CardTitle>Benefits</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="leading-relaxed">{scheme.benefits}</p>
+                <p className="leading-relaxed">{benefits}</p>
               </CardContent>
             </Card>
 
@@ -164,9 +204,7 @@ export default function SchemeDetailPage({ params }: PageProps) {
             <Card>
               <CardHeader>
                 <CardTitle>Eligibility Breakdown</CardTitle>
-                <CardDescription>
-                  Based on your profile information
-                </CardDescription>
+                <CardDescription>Based on your profile information</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
@@ -183,10 +221,18 @@ export default function SchemeDetailPage({ params }: PageProps) {
                       Matching Criteria
                     </h4>
                     <div className="space-y-1">
-                      {scheme.matching_criteria.map((c) => (
+                      {scheme.matching_criteria.map((c, idx) => (
                         <div key={c} className="flex items-center gap-2 text-sm">
                           <CheckCircle2 className="h-4 w-4 text-green-600" />
-                          <span>{c}</span>
+                          <span>
+                            {tDb(
+                              t,
+                              "schemes",
+                              schemeId,
+                              `matching_criteria.${idx}`,
+                              c
+                            )}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -199,10 +245,18 @@ export default function SchemeDetailPage({ params }: PageProps) {
                       Missing / Not Matching
                     </h4>
                     <div className="space-y-1">
-                      {scheme.missing_criteria.map((c) => (
+                      {scheme.missing_criteria.map((c, idx) => (
                         <div key={c} className="flex items-center gap-2 text-sm">
                           <XCircle className="h-4 w-4 text-red-500" />
-                          <span>{c}</span>
+                          <span>
+                            {tDb(
+                              t,
+                              "schemes",
+                              schemeId,
+                              `missing_criteria.${idx}`,
+                              c
+                            )}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -212,14 +266,14 @@ export default function SchemeDetailPage({ params }: PageProps) {
             </Card>
 
             {/* Application Process */}
-            {scheme.application_process && (
+            {applicationProcess && (
               <Card>
                 <CardHeader>
                   <CardTitle>Application Process</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="whitespace-pre-line leading-relaxed">
-                    {scheme.application_process}
+                    {applicationProcess}
                   </p>
                 </CardContent>
               </Card>
@@ -276,10 +330,20 @@ export default function SchemeDetailPage({ params }: PageProps) {
                 <CardTitle>Scheme Info</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex items-center gap-2 text-sm">
-                  <Building2 className="h-4 w-4 text-muted-foreground" />
-                  <span>{scheme.department}</span>
-                </div>
+                {scheme.department && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Building2 className="h-4 w-4 text-muted-foreground" />
+                    <span>
+                      {tDb(
+                        t,
+                        "schemes",
+                        schemeId,
+                        "department",
+                        scheme.department
+                      )}
+                    </span>
+                  </div>
+                )}
                 <Separator />
                 <div className="flex items-center gap-2 text-sm">
                   <Shield className="h-4 w-4 text-muted-foreground" />
@@ -311,13 +375,16 @@ export default function SchemeDetailPage({ params }: PageProps) {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-1">
-                      {scheme.eligibility_rules.required_documents.map((d) => (
-                        <li
-                          key={d}
-                          className="flex items-center gap-2 text-sm"
-                        >
+                      {scheme.eligibility_rules.required_documents.map((d, idx) => (
+                        <li key={d} className="flex items-center gap-2 text-sm">
                           <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          {d}
+                          {tDb(
+                            t,
+                            "schemes",
+                            schemeId,
+                            `required_documents.${idx}`,
+                            d
+                          )}
                         </li>
                       ))}
                     </ul>

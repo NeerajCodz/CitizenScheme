@@ -4,9 +4,9 @@ import {
   createThread,
   getThread,
   sendMessage,
-  addMemory,
 } from "@/lib/backboard";
 import type { UserProfile } from "@/lib/types";
+import { buildProfileContext, syncBackboardMemories } from "@/lib/chatContext";
 
 // ─── GET: Get or create a chat thread for the current user ───
 export async function GET() {
@@ -64,9 +64,7 @@ export async function GET() {
 
     // Seed the assistant with user profile context via memory
     const profileContext = buildProfileContext(profile as UserProfile);
-    if (profileContext) {
-      await addMemory(profileContext);
-    }
+    await syncBackboardMemories(supabase, user.id, profileContext);
 
     return NextResponse.json({
       thread_id: thread.thread_id,
@@ -223,28 +221,3 @@ export async function DELETE() {
   }
 }
 
-// ─── Helpers ───
-
-function buildProfileContext(profile: UserProfile): string {
-  const parts: string[] = [];
-
-  if (profile.full_name) parts.push(`Name: ${profile.full_name}`);
-  if (profile.gender) parts.push(`Gender: ${profile.gender}`);
-  if (profile.date_of_birth) parts.push(`DOB: ${profile.date_of_birth}`);
-  if (profile.state) parts.push(`State: ${profile.state}`);
-  if (profile.annual_income !== null && profile.annual_income !== undefined)
-    parts.push(`Annual Income: ₹${profile.annual_income.toLocaleString()}`);
-  if (profile.caste_category) parts.push(`Category: ${profile.caste_category}`);
-  if (profile.occupation) parts.push(`Occupation: ${profile.occupation}`);
-  if (profile.disability_status)
-    parts.push(`Disability: ${profile.disability_status}`);
-  if (profile.address) {
-    const addr = profile.address;
-    const addrParts = [addr.city, addr.district, addr.state, addr.pincode]
-      .filter(Boolean)
-      .join(", ");
-    if (addrParts) parts.push(`Address: ${addrParts}`);
-  }
-
-  return parts.join("; ");
-}

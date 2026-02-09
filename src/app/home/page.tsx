@@ -131,106 +131,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       {/* Header Component */}
       <Header />
-
-      {/* Hero Section with Parallax */}
-      <motion.section
-        style={{ opacity, scale }}
-        className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white"
-      >
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() * 300 + 50,
-                height: Math.random() * 300 + 50,
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.1, 0.3, 0.1],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="relative container mx-auto px-4 py-20 sm:py-32">
-          <div className="max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6"
-              >
-                <Sparkles className="w-5 h-5" />
-                <span className="font-semibold">{t("hero.badge")}</span>
-              </motion.div>
-              
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                {t("hero.title")}
-                <br />
-                <span className="bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text text-transparent">
-                  {t("hero.subtitle")}
-                </span>
-              </h1>
-              
-              <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl">
-                {t("hero.description")}
-              </p>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="flex flex-wrap gap-4"
-              >
-                <Button
-                  size="lg"
-                  className="bg-white text-primary hover:bg-white/90 font-semibold px-8"
-                  onClick={() =>
-                    document
-                      .getElementById("featured")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
-                >
-                  {t("hero.cta")}
-                  <ChevronRight className="ml-2 w-5 h-5" />
-                </Button>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Wave Divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 120"
-            className="w-full h-auto"
-            preserveAspectRatio="none"
-          >
-            <path
-              d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L0,120Z"
-              fill="hsl(38 25% 95%)"
-            />
-          </svg>
-        </div>
-      </motion.section>
 
       {/* Featured Schemes - Horizontal Scroll */}
       <section id="featured" className="py-16 relative">
@@ -290,7 +193,7 @@ export default function HomePage() {
       </section>
 
       {/* Eligible Schemes */}
-      <section className="py-16 bg-linear-to-b from-orange-50/30 to-transparent">
+      <section className="py-16 bg-linear-to-b from-white/40 via-orange-50/20 to-transparent">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -57,6 +57,21 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // If user is signed in and already completed onboarding, keep them out of /onboarding
+  if (user && pathname === "/onboarding") {
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("onboarding_completed")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.onboarding_completed) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/home";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // If user is signed in but hasn't completed onboarding
   // (skip for org routes, admin routes, and api routes)
   if (
@@ -82,13 +97,21 @@ export async function updateSession(request: NextRequest) {
 
   // Admin route protection
   if (user && pathname.startsWith("/admin")) {
-    const { data: adminUser } = await supabase
-      .from("admin_users")
-      .select("id")
-      .eq("id", user.id)
-      .single();
+    const adminCheckUrl = new URL("/api/admin/check", request.url);
+    const adminRes = await fetch(adminCheckUrl, {
+      headers: {
+        cookie: request.headers.get("cookie") ?? "",
+      },
+    });
 
-    if (!adminUser) {
+    if (!adminRes.ok) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/home";
+      return NextResponse.redirect(url);
+    }
+
+    const { isAdmin } = (await adminRes.json()) as { isAdmin: boolean };
+    if (!isAdmin) {
       const url = request.nextUrl.clone();
       url.pathname = "/home";
       return NextResponse.redirect(url);

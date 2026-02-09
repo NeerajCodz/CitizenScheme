@@ -175,7 +175,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       <Header />
 
       {/* Hero Section */}

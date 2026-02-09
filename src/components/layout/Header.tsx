@@ -22,17 +22,8 @@ export function Header() {
   const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     const supabase = createClient();
@@ -50,7 +41,7 @@ export function Header() {
   const navLinks = [
     { href: "/home", label: t("nav.home") || "Home", icon: Home },
     { href: "/schemes", label: t("nav.schemes") || "Schemes", icon: FileText },
-    { href: "/help", label: t("nav.help") || "Help", icon: HelpCircle },
+    { href: "/chat", label: t("nav.help") || "Help", icon: HelpCircle },
   ];
 
   return (
@@ -59,11 +50,7 @@ export function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "neo-flat shadow-lg"
-            : "bg-background/80 backdrop-blur-md"
-        }`}
+        className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/60 shadow-[0_12px_30px_rgba(15,23,42,0.12)] transition-all duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
@@ -72,10 +59,9 @@ export function Header() {
               <motion.div
                 whileHover={{ rotate: 360, scale: 1.1 }}
                 transition={{ duration: 0.6 }}
-                className="relative h-12 w-12 rounded-2xl neo-convex flex items-center justify-center overflow-hidden"
+                className="relative h-12 w-12 rounded-2xl neo-convex flex items-center justify-center"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 opacity-90" />
-                <Sparkles className="h-6 w-6 text-white relative z-10" />
+                <Sparkles className="h-6 w-6 text-primary" />
               </motion.div>
               <div className="hidden sm:block">
                 <motion.h1
@@ -188,7 +174,7 @@ export function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t neo-pressed"
+              className="lg:hidden border-t border-white/60 bg-white/70 backdrop-blur-xl"
             >
               <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
                 {navLinks.map((link) => {

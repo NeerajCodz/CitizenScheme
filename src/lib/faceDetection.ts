@@ -10,7 +10,7 @@ export async function loadFaceDetectionModels() {
   if (modelsLoaded) return;
 
   try {
-    const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model';
+    const MODEL_URL = "https://justadudewhohacks.github.io/face-api.js/models";
     
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
@@ -101,7 +101,13 @@ export async function detectFaceOrientation(
 
   try {
     const detection = await faceapi
-      .detectSingleFace(input, new faceapi.TinyFaceDetectorOptions())
+      .detectSingleFace(
+        input,
+        new faceapi.TinyFaceDetectorOptions({
+          inputSize: 224,
+          scoreThreshold: 0.4,
+        })
+      )
       .withFaceLandmarks();
 
     if (!detection) {

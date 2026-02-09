@@ -74,58 +74,80 @@ body {
   color: var(--color-foreground);
 }
 
+/* ─── Neomorphic scrollbars ─── */
+.neo-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(27 55% 55% / 0.6) transparent;
+}
+
+.neo-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.neo-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.neo-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, hsl(27 75% 60% / 0.8), hsl(145 55% 38% / 0.8));
+  border-radius: 999px;
+  border: 2px solid hsl(38 25% 95% / 0.8);
+}
+
+.neo-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, hsl(27 85% 58% / 0.9), hsl(145 60% 35% / 0.9));
+}
+
 /* ─── Neomorphism utility classes ─── */
 .neo-flat {
-  background: linear-gradient(145deg, hsl(38 26% 96%), hsl(38 24% 94%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.82), hsl(0 0% 100% / 0.72));
   box-shadow:
-    8px 8px 18px 0 var(--neo-shadow-dark),
-    -8px -8px 18px 0 var(--neo-shadow-light),
-    inset 1px 1px 2px 0 hsl(38 30% 98% / 0.5),
-    inset -1px -1px 2px 0 hsl(30 12% 78% / 0.1);
+    14px 14px 34px 0 hsl(215 20% 15% / 0.08),
+    -10px -10px 28px 0 hsl(0 0% 100% / 0.9);
   border-radius: 1.5rem;
-  border: 1px solid hsl(38 18% 89% / 0.6);
+  border: 1px solid hsl(0 0% 100% / 0.6);
+  backdrop-filter: blur(16px);
 }
 
 .neo-pressed {
-  background: linear-gradient(145deg, hsl(38 22% 92%), hsl(38 26% 96%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.76), hsl(0 0% 100% / 0.7));
   box-shadow:
-    inset 5px 5px 12px 0 var(--neo-shadow-dark),
-    inset -5px -5px 12px 0 var(--neo-shadow-light),
-    inset -1px -1px 2px 0 hsl(38 30% 98% / 0.3);
+    inset 6px 6px 14px 0 hsl(215 20% 15% / 0.12),
+    inset -6px -6px 14px 0 hsl(0 0% 100% / 0.85);
   border-radius: 1.25rem;
-  border: 1px solid hsl(38 18% 89% / 0.4);
+  border: 1px solid hsl(0 0% 100% / 0.6);
+  backdrop-filter: blur(16px);
 }
 
 .neo-convex {
-  background: linear-gradient(145deg, hsl(40 28% 97%), hsl(36 20% 91%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.86), hsl(0 0% 100% / 0.7));
   box-shadow:
-    6px 6px 14px 0 var(--neo-shadow-dark),
-    -6px -6px 14px 0 var(--neo-shadow-light),
-    inset 2px 2px 3px 0 hsl(40 30% 99% / 0.6),
-    inset -1px -1px 2px 0 hsl(30 12% 78% / 0.15);
+    10px 10px 24px 0 hsl(215 20% 15% / 0.1),
+    -10px -10px 24px 0 hsl(0 0% 100% / 0.9);
   border-radius: 1.5rem;
-  border: 1px solid hsl(38 18% 89% / 0.5);
+  border: 1px solid hsl(0 0% 100% / 0.55);
+  backdrop-filter: blur(18px);
 }
 
 .neo-concave {
-  background: linear-gradient(145deg, hsl(36 20% 91%), hsl(40 28% 97%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.72), hsl(0 0% 100% / 0.66));
   box-shadow:
-    inset 6px 6px 14px 0 var(--neo-shadow-dark),
-    inset -6px -6px 14px 0 var(--neo-shadow-light),
-    inset -2px -2px 3px 0 hsl(40 30% 99% / 0.4);
+    inset 8px 8px 18px 0 hsl(215 20% 15% / 0.14),
+    inset -8px -8px 18px 0 hsl(0 0% 100% / 0.9);
   border-radius: 1.5rem;
-  border: 1px solid hsl(38 18% 89% / 0.4);
+  border: 1px solid hsl(0 0% 100% / 0.5);
+  backdrop-filter: blur(18px);
 }
 
 .neo-card {
-  background: linear-gradient(145deg, hsl(40 26% 96%), hsl(36 20% 91%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.86), hsl(0 0% 100% / 0.76));
   box-shadow:
-    10px 10px 20px 0 hsl(30 12% 78% / 0.65),
-    -10px -10px 20px 0 hsl(38 20% 88% / 0.8),
-    inset 2px 2px 4px 0 hsl(40 30% 98% / 0.6),
-    inset -2px -2px 3px 0 hsl(30 12% 78% / 0.1);
-  border-radius: 1.5rem;
-  border: 1px solid hsl(38 20% 90% / 0.7);
+    18px 18px 40px 0 hsl(215 20% 15% / 0.12),
+    -14px -14px 36px 0 hsl(0 0% 100% / 0.9);
+  border-radius: 1.75rem;
+  border: 1px solid hsl(0 0% 100% / 0.6);
+  backdrop-filter: blur(18px);
 }
 
 .neo-card-hover {
@@ -134,79 +156,73 @@ body {
 
 .neo-card-hover:hover {
   box-shadow:
-    15px 15px 30px 0 hsl(30 12% 78% / 0.8),
-    -15px -15px 30px 0 hsl(38 20% 88% / 0.9);
+    20px 20px 44px 0 hsl(215 20% 15% / 0.14),
+    -16px -16px 40px 0 hsl(0 0% 100% / 0.92);
   transform: translateY(-2px);
 }
 
 .neo-btn {
-  background: linear-gradient(145deg, hsl(40 26% 96%), hsl(36 20% 91%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.82), hsl(0 0% 100% / 0.68));
   box-shadow:
-    5px 5px 12px 0 hsl(30 12% 78% / 0.5),
-    -5px -5px 12px 0 hsl(38 20% 88% / 0.7),
-    inset 1px 1px 2px 0 hsl(40 30% 98% / 0.5),
-    inset -1px -1px 2px 0 hsl(30 12% 78% / 0.1);
+    10px 10px 24px 0 hsl(215 20% 15% / 0.1),
+    -8px -8px 20px 0 hsl(0 0% 100% / 0.9);
   border-radius: 1rem;
-  border: 1px solid hsl(38 20% 90% / 0.6);
+  border: 1px solid hsl(0 0% 100% / 0.65);
   transition: all 0.2s ease;
+  backdrop-filter: blur(14px);
 }
 
 .neo-btn:hover {
   box-shadow:
-    3px 3px 8px 0 hsl(30 12% 78% / 0.5),
-    -3px -3px 8px 0 hsl(38 20% 88% / 0.7);
+    8px 8px 18px 0 hsl(215 20% 15% / 0.12),
+    -8px -8px 18px 0 hsl(0 0% 100% / 0.95);
   transform: translateY(-1px);
 }
 
 .neo-btn:active {
   box-shadow:
-    inset 4px 4px 10px 0 var(--neo-shadow-dark),
-    inset -4px -4px 10px 0 var(--neo-shadow-light);
+    inset 6px 6px 14px 0 hsl(215 20% 15% / 0.16),
+    inset -6px -6px 14px 0 hsl(0 0% 100% / 0.9);
   transform: translateY(0);
 }
 
 .neo-input {
-  background: linear-gradient(145deg, hsl(38 22% 93%), hsl(38 26% 96%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.78), hsl(0 0% 100% / 0.66));
   box-shadow:
-    inset 4px 4px 10px 0 hsl(30 12% 78% / 0.45),
-    inset -4px -4px 10px 0 hsl(38 20% 88% / 0.6),
-    inset -1px -1px 2px 0 hsl(40 30% 98% / 0.4);
+    inset 6px 6px 14px 0 hsl(215 20% 15% / 0.12),
+    inset -6px -6px 14px 0 hsl(0 0% 100% / 0.9);
   border-radius: 0.875rem;
-  border: 1px solid hsl(38 18% 86% / 0.5);
+  border: 1px solid hsl(0 0% 100% / 0.6);
   transition: all 0.2s ease;
+  backdrop-filter: blur(12px);
 }
 
 .neo-input:focus {
   box-shadow:
-    inset 5px 5px 12px 0 hsl(30 12% 78% / 0.5),
-    inset -5px -5px 12px 0 hsl(38 20% 88% / 0.7),
-    0 0 0 2px var(--color-primary);
+    inset 7px 7px 16px 0 hsl(215 20% 15% / 0.16),
+    inset -7px -7px 16px 0 hsl(0 0% 100% / 0.95),
+    0 0 0 2px hsl(27 91% 55% / 0.6);
 }
 
 /* ─── 3D Neomorphic Effects ─── */
 .neo-3d {
-  background: linear-gradient(145deg, hsl(40 28% 97%), hsl(36 20% 91%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.88), hsl(0 0% 100% / 0.74));
   box-shadow:
-    12px 12px 24px 0 hsl(30 12% 78% / 0.7),
-    -12px -12px 24px 0 hsl(38 20% 88% / 0.9),
-    inset 3px 3px 6px 0 hsl(40 30% 99% / 0.7),
-    inset -3px -3px 6px 0 hsl(30 12% 78% / 0.2);
+    22px 22px 50px 0 hsl(215 20% 15% / 0.14),
+    -18px -18px 46px 0 hsl(0 0% 100% / 0.95);
   border-radius: 2rem;
-  border: 1px solid hsl(38 20% 90% / 0.8);
+  border: 1px solid hsl(0 0% 100% / 0.65);
+  backdrop-filter: blur(20px);
 }
 
 .neo-raised {
-  background: linear-gradient(145deg, hsl(40 28% 97%), hsl(36 20% 91%));
+  background: linear-gradient(180deg, hsl(0 0% 100% / 0.88), hsl(0 0% 100% / 0.78));
   box-shadow:
-    8px 8px 16px 0 hsl(30 12% 78% / 0.6),
-    -8px -8px 16px 0 hsl(38 20% 88% / 0.8),
-    inset 2px 2px 4px 0 hsl(40 30% 99% / 0.5),
-    inset -1px -1px 2px 0 hsl(30 12% 78% / 0.15);
+    20px 20px 46px 0 hsl(215 20% 15% / 0.12),
+    -18px -18px 40px 0 hsl(0 0% 100% / 0.92);
   border-radius: 1.5rem;
-  border-top: 1px solid hsl(40 30% 98% / 0.9);
-  border-left: 1px solid hsl(40 30% 98% / 0.9);
-  border-bottom: 1px solid hsl(30 12% 78% / 0.4);
-  border-right: 1px solid hsl(30 12% 78% / 0.4);
+  border: 1px solid hsl(0 0% 100% / 0.65);
+  backdrop-filter: blur(20px);
 }
 
 /* ─── Glass Morphism Utilities ─── */

@@ -233,7 +233,7 @@ export default function OnboardingPage() {
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
       {/* Header */}
       <header className="neo-flat rounded-2xl">
         <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">

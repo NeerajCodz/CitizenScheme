@@ -11,8 +11,12 @@ import { createClient } from "@/lib/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import type { Id } from "../../../convex/_generated/dataModel";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n";
+import { tDb } from "@/lib/dbI18n";
 
 export default function NotificationsPage() {
+  const { t, i18n } = useTranslation();
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
 
@@ -122,19 +126,21 @@ export default function NotificationsPage() {
                                 !n.read ? "font-bold" : "font-semibold"
                               }`}
                             >
-                              {n.title}
+                              {tDb(t, "notifications", n._id, "title", n.title)}
                             </h3>
                             {!n.read && (
                               <span className="h-2 w-2 rounded-full bg-primary" />
                             )}
                           </div>
-                          <p className="text-muted-foreground">{n.message}</p>
+                          <p className="text-muted-foreground">
+                            {tDb(t, "notifications", n._id, "message", n.message)}
+                          </p>
                           <div className="flex items-center gap-3 text-sm">
                             <Badge variant="outline" className="capitalize">
                               {n.type.replace(/_/g, " ")}
                             </Badge>
                             <span className="text-muted-foreground">
-                              {new Date(n.createdAt).toLocaleDateString("en-IN", {
+                              {new Date(n.createdAt).toLocaleDateString(i18n.language, {
                                 day: "numeric",
                                 month: "short",
                                 year: "numeric",
