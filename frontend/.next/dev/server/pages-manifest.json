@@ -1,8 +1,0 @@
-{
-  "/": "pages/index.js",
-  "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
-  "/citizen-access": "pages/citizen-access.js",
-  "/login": "pages/login.js",
-  "/voice-assistant": "pages/voice-assistant.js"
-}

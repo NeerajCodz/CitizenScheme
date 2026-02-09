@@ -1,0 +1,213 @@
+"use client";
+
+import { useRef, useState, useCallback, useEffect } from "react";
+import Webcam from "react-webcam";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Camera, RotateCcw, CheckCircle2, AlertCircle } from "lucide-react";
+
+type Pose = "front" | "left" | "right";
+
+interface FaceCaptureProps {
+  onComplete: (images: Record<Pose, string>) => void;
+}
+
+const POSES: { key: Pose; label: string; instruction: string }[] = [
+  {
+    key: "front",
+    label: "Front",
+    instruction: "Look straight at the camera",
+  },
+  {
+    key: "left",
+    label: "Left",
+    instruction: "Turn your head slightly to the left",
+  },
+  {
+    key: "right",
+    label: "Right",
+    instruction: "Turn your head slightly to the right",
+  },
+];
+
+const videoConstraints = {
+  width: 480,
+  height: 480,
+  facingMode: "user",
+};
+
+export default function FaceCapture({ onComplete }: FaceCaptureProps) {
+  const webcamRef = useRef<Webcam>(null);
+  const [currentPoseIdx, setCurrentPoseIdx] = useState(0);
+  const [capturedImages, setCapturedImages] = useState<Partial<Record<Pose, string>>>({});
+  const [countdown, setCountdown] = useState<number | null>(null);
+  const [cameraError, setCameraError] = useState(false);
+
+  const currentPose = POSES[currentPoseIdx];
+  const progress = (Object.keys(capturedImages).length / POSES.length) * 100;
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (!imageSrc) return;
+
+    const pose = POSES[currentPoseIdx].key;
+    const next = { ...capturedImages, [pose]: imageSrc };
+    setCapturedImages(next);
+
+    if (currentPoseIdx < POSES.length - 1) {
+      setCurrentPoseIdx((i) => i + 1);
+    } else {
+      onComplete(next as Record<Pose, string>);
+    }
+  }, [currentPoseIdx, capturedImages, onComplete]);
+
+  const startCountdown = useCallback(() => {
+    setCountdown(3);
+  }, []);
+
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown === 0) {
+      queueMicrotask(() => {
+        capture();
+        setCountdown(null);
+      });
+      return;
+    }
+    const timer = setTimeout(() => setCountdown((c) => (c !== null ? c - 1 : null)), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown, capture]);
+
+  const retake = () => {
+    setCapturedImages({});
+    setCurrentPoseIdx(0);
+    setCountdown(null);
+  };
+
+  if (cameraError) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center gap-4 py-12">
+          <AlertCircle className="h-12 w-12 text-destructive" />
+          <p className="text-center text-muted-foreground">
+            Unable to access camera. Please allow camera permissions and try
+            again.
+          </p>
+          <Button variant="outline" onClick={() => setCameraError(false)}>
+            <RotateCcw className="mr-2 h-4 w-4" /> Try Again
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const allCaptured = Object.keys(capturedImages).length === POSES.length;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Camera className="h-5 w-5" />
+          Face Verification
+        </CardTitle>
+        <Progress value={progress} className="mt-2" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Pose indicators */}
+        <div className="flex justify-center gap-4">
+          {POSES.map((p, i) => (
+            <div
+              key={p.key}
+              className={`flex items-center gap-1.5 text-sm ${
+                capturedImages[p.key]
+                  ? "text-green-600"
+                  : i === currentPoseIdx
+                    ? "font-semibold text-primary"
+                    : "text-muted-foreground"
+              }`}
+            >
+              {capturedImages[p.key] ? (
+                <CheckCircle2 className="h-4 w-4" />
+              ) : (
+                <span className="flex h-4 w-4 items-center justify-center rounded-full border text-xs">
+                  {i + 1}
+                </span>
+              )}
+              {p.label}
+            </div>
+          ))}
+        </div>
+
+        {/* Camera / Preview */}
+        <div className="relative mx-auto w-fit overflow-hidden rounded-2xl bg-muted">
+          {!allCaptured ? (
+            <>
+              <Webcam
+                ref={webcamRef}
+                audio={false}
+                screenshotFormat="image/jpeg"
+                videoConstraints={videoConstraints}
+                onUserMediaError={() => setCameraError(true)}
+                className="rounded-2xl"
+                mirrored
+              />
+              {/* Circle overlay */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <div className="h-60 w-60 rounded-full border-4 border-dashed border-primary/50" />
+              </div>
+              {/* Countdown overlay */}
+              {countdown !== null && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                  <span className="text-6xl font-bold text-white">
+                    {countdown}
+                  </span>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="grid grid-cols-3 gap-2 p-2">
+              {POSES.map((p) => (
+                <div key={p.key} className="text-center">
+                  <Image
+                    src={capturedImages[p.key] || ""}
+                    alt={p.label}
+                    width={160}
+                    height={160}
+                    className="rounded-lg"
+                    unoptimized
+                  />
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {p.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Instructions & Actions */}
+        {!allCaptured ? (
+          <div className="text-center">
+            <p className="mb-3 font-medium">{currentPose.instruction}</p>
+            <Button
+              onClick={startCountdown}
+              disabled={countdown !== null}
+              size="lg"
+            >
+              <Camera className="mr-2 h-4 w-4" />
+              {countdown !== null ? `Capturing in ${countdown}...` : "Capture"}
+            </Button>
+          </div>
+        ) : (
+          <div className="flex justify-center gap-3">
+            <Button variant="outline" onClick={retake}>
+              <RotateCcw className="mr-2 h-4 w-4" /> Retake All
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}

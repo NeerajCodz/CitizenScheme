@@ -1,0 +1,324 @@
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useSupabaseRealtime } from "@/hooks/useSupabaseRealtime";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import {
+  Shield,
+  Search,
+  LogOut,
+  ChevronRight,
+  Loader2,
+  Sparkles,
+  FileText,
+  Filter,
+  Star,
+  ListFilter,
+} from "lucide-react";
+import { getInitials } from "@/lib/utils";
+import type { SchemeRecommendation, UserProfile } from "@/lib/types";
+
+// Dynamic import to skip SSR for Convex-dependent components
+const NotificationBell = dynamic(
+  () => import("@/components/notifications/NotificationBellClient"),
+  { ssr: false }
+);
+
+const Chatbot = dynamic(
+  () => import("@/components/chatbot/Chatbot"),
+  { ssr: false }
+);
+
+export default function HomePage() {
+  const router = useRouter();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [recommendations, setRecommendations] = useState<SchemeRecommendation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [view, setView] = useState<"eligible" | "all">("eligible");
+
+  const fetchData = useCallback(async () => {
+    try {
+      const params = new URLSearchParams();
+      if (search) params.set("search", search);
+      if (categoryFilter && categoryFilter !== "all")
+        params.set("category", categoryFilter);
+
+      const res = await fetch(`/api/schemes/recommend?${params}`);
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error);
+      setRecommendations(json.recommendations);
+      if (json.profile) setUser(json.profile);
+    } catch {
+      toast.error("Failed to load recommendations");
+    } finally {
+      setLoading(false);
+    }
+  }, [search, categoryFilter]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  // Real-time: refresh when schemes table changes
+  useSupabaseRealtime({
+    table: "schemes",
+    event: "*",
+    onChange: () => {
+      fetchData();
+    },
+  });
+
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+  };
+
+  const categories = [
+    ...new Set(recommendations.map((r) => r.category)),
+  ].sort();
+
+  // Split into eligible (>=60%) and all
+  const eligibleSchemes = recommendations.filter((r) => r.eligibility_score >= 60);
+  const displayedSchemes = view === "eligible" ? eligibleSchemes : recommendations;
+
+  const scoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 50) return "text-yellow-600";
+    return "text-muted-foreground";
+  };
+
+  const scoreBadge = (score: number) => {
+    if (score >= 80) return "success";
+    if (score >= 50) return "warning";
+    return "secondary";
+  };
+
+  return (
+    <div className="min-h-screen bg-(--neo-bg)">
+      {/* Nav */}
+      <nav className="neo-flat sticky top-0 z-50">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+          <Link href="/home" className="flex items-center gap-2">
+            <Shield className="h-5 w-5 text-primary" />
+            <span className="font-bold">Citizen Copilot</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <NotificationBell />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Avatar className="h-7 w-7">
+                    <AvatarImage src={user?.avatar_url || ""} />
+                    <AvatarFallback className="text-xs">
+                      {getInitials(user?.full_name || user?.email || "U")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:inline text-sm">
+                    {user?.full_name || "User"}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" /> Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </nav>
+
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        {/* Greeting */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold">
+            {user?.full_name
+              ? `Welcome, ${user.full_name.split(" ")[0]}!`
+              : "Your Recommendations"}
+          </h1>
+          <p className="text-muted-foreground">
+            Schemes matched to your profile, sorted by eligibility.
+          </p>
+        </div>
+
+        {/* View Toggle + Filters */}
+        <div className="mb-6 space-y-3">
+          {/* Tabs: Eligible / All Schemes */}
+          <div className="flex gap-2">
+            <Button
+              variant={view === "eligible" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setView("eligible")}
+              className={view === "eligible" ? "neo-btn" : ""}
+            >
+              <Star className="mr-1 h-4 w-4" />
+              Eligible ({eligibleSchemes.length})
+            </Button>
+            <Button
+              variant={view === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setView("all")}
+              className={view === "all" ? "neo-btn" : ""}
+            >
+              <ListFilter className="mr-1 h-4 w-4" />
+              All Schemes ({recommendations.length})
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search schemes..."
+                className="pl-9 neo-input"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+              <SelectTrigger className="w-45 neo-input">
+                <Filter className="mr-2 h-4 w-4" />
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Categories</SelectItem>
+                {categories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {/* Results */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : displayedSchemes.length === 0 ? (
+          <Card className="neo-card">
+            <CardContent className="flex flex-col items-center gap-4 py-16">
+              <Sparkles className="h-12 w-12 text-muted-foreground" />
+              <p className="text-lg font-medium">
+                {view === "eligible"
+                  ? "No eligible schemes found"
+                  : "No schemes found"}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {view === "eligible"
+                  ? "Try viewing all schemes or adjusting your filters."
+                  : "Try adjusting your search or filters."}
+              </p>
+              {view === "eligible" && (
+                <Button variant="outline" onClick={() => setView("all")}>
+                  View All Schemes
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {displayedSchemes.map((scheme) => (
+              <Card
+                key={scheme.id}
+                className="neo-card flex flex-col transition-all duration-200 hover:-translate-y-0.5"
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <Badge
+                      variant={scoreBadge(scheme.eligibility_score) as "success" | "warning" | "secondary"}
+                    >
+                      {scheme.eligibility_score}% match
+                    </Badge>
+                    <Badge variant="outline" className="text-xs">
+                      {scheme.category}
+                    </Badge>
+                  </div>
+                  <CardTitle className="mt-2 text-lg leading-snug">
+                    {scheme.scheme_name}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-2">
+                    {scheme.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-1 pb-3">
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Eligibility</span>
+                    <span className={`font-semibold ${scoreColor(scheme.eligibility_score)}`}>
+                      {scheme.eligibility_score}%
+                    </span>
+                  </div>
+                  <Progress value={scheme.eligibility_score} className="mb-3" />
+                  {scheme.matching_criteria.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {scheme.matching_criteria.slice(0, 3).map((c) => (
+                        <Badge key={c} variant="secondary" className="text-xs">
+                          {c}
+                        </Badge>
+                      ))}
+                      {scheme.matching_criteria.length > 3 && (
+                        <Badge variant="secondary" className="text-xs">
+                          +{scheme.matching_criteria.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+                <Separator />
+                <CardFooter className="pt-3">
+                  <Link href={`/scheme/${scheme.slug}`} className="w-full">
+                    <Button variant="ghost" className="w-full justify-between">
+                      <span className="flex items-center gap-2">
+                        <FileText className="h-4 w-4" /> View Details
+                      </span>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Floating Chatbot */}
+      <Chatbot />
+    </div>
+  );
+}
