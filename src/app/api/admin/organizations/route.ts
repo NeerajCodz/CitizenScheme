@@ -90,8 +90,15 @@ export async function PATCH(request: NextRequest) {
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/(^-|-$)/g, "");
 
+        // Get org owner_id to set as created_by
+        const { data: orgData } = await supabase
+          .from("organizations")
+          .select("owner_id")
+          .eq("id", req.org_id)
+          .single();
+
         await supabase.from("schemes").insert({
-          slug,
+          slug: `${slug}-${Date.now().toString(36)}`,
           scheme_name: sd.scheme_name,
           scheme_code: sd.scheme_code || slug.toUpperCase(),
           description: sd.description || "",
@@ -102,7 +109,9 @@ export async function PATCH(request: NextRequest) {
           eligibility_rules: sd.eligibility_rules || {},
           application_process: sd.application_process || null,
           official_website: sd.official_website || null,
-          created_by: req.org_id,
+          created_by: orgData?.owner_id || null,
+          scheme_type: "private",
+          application_form_fields: [],
           is_active: true,
         });
       }

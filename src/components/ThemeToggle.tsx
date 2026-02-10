@@ -19,10 +19,10 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className="relative neo-flat hover:neo-pressed rounded-xl w-10 h-10"
+        className="relative neo-elevated hover:neo-inset rounded-xl w-10 h-10"
         aria-label="Toggle theme"
       >
-        <Sun className="h-5 w-5 text-orange-500" />
+        <Sun className="h-5 w-5 text-emerald-500" />
       </Button>
     );
   }
@@ -32,7 +32,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="relative neo-flat hover:neo-pressed rounded-xl w-10 h-10"
+      className="relative neo-elevated hover:neo-inset rounded-xl w-10 h-10"
       aria-label="Toggle theme"
     >
       <motion.div
@@ -45,7 +45,7 @@ export function ThemeToggle() {
         transition={{ duration: 0.2 }}
         className="absolute"
       >
-        <Sun className="h-5 w-5 text-orange-500" />
+        <Sun className="h-5 w-5 text-emerald-500" />
       </motion.div>
       <motion.div
         initial={false}

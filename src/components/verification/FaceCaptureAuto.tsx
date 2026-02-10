@@ -243,7 +243,7 @@ export default function FaceCaptureAuto({ onComplete }: FaceCaptureProps) {
               animate={{ scale: i === currentPoseIdx && !allCaptured ? 1.1 : 1 }}
               className={`flex items-center gap-1.5 text-sm ${
                 capturedImages[p.key]
-                  ? "text-green-600"
+                  ? "text-emerald-600"
                   : i === currentPoseIdx
                     ? "font-semibold text-primary"
                     : "text-muted-foreground"
@@ -358,7 +358,7 @@ export default function FaceCaptureAuto({ onComplete }: FaceCaptureProps) {
               Position your face within the circle. Auto-capture will start when face is detected.
             </p>
             {!cvReady && (
-              <p className="text-xs text-orange-600">Loading face detection...</p>
+              <p className="text-xs text-emerald-600">Loading face detection...</p>
             )}
           </div>
         ) : (
@@ -372,3 +372,4 @@ export default function FaceCaptureAuto({ onComplete }: FaceCaptureProps) {
     </Card>
   );
 }
+

@@ -50,7 +50,7 @@ export function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/60 shadow-[0_12px_30px_rgba(15,23,42,0.12)] transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-50 bg-[#f0f0f3]/80 dark:bg-[hsl(240,10%,10%)]/80 backdrop-blur-xl border-b border-white/40 dark:border-white/10 shadow-[6px_6px_12px_rgba(163,177,198,0.4),-6px_-6px_12px_rgba(255,255,255,0.8)] dark:shadow-[4px_4px_10px_hsl(240,12%,6%),-4px_-4px_10px_hsl(240,10%,18%)] transition-all duration-300"
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
@@ -59,13 +59,13 @@ export function Header() {
               <motion.div
                 whileHover={{ rotate: 360, scale: 1.1 }}
                 transition={{ duration: 0.6 }}
-                className="relative h-12 w-12 rounded-2xl neo-convex flex items-center justify-center"
+                className="relative h-12 w-12 rounded-2xl neo-elevated flex items-center justify-center"
               >
                 <Sparkles className="h-6 w-6 text-primary" />
               </motion.div>
               <div className="hidden sm:block">
                 <motion.h1
-                  className="text-2xl font-bold bg-gradient-to-r from-orange-600 via-orange-500 to-orange-600 bg-clip-text text-transparent"
+                  className="text-2xl font-bold bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 bg-clip-text text-transparent"
                   whileHover={{ scale: 1.05 }}
                 >
                   CitizenSchemes
@@ -91,8 +91,8 @@ export function Header() {
                         variant="ghost"
                         className={`gap-2 rounded-xl transition-all ${
                           isActive
-                            ? "neo-pressed text-primary font-semibold"
-                            : "hover:neo-flat"
+                            ? "neo-inset text-emerald-600 dark:text-emerald-400 font-semibold"
+                            : "hover:neo-elevated"
                         }`}
                       >
                         <Icon className="h-4 w-4" />
@@ -125,7 +125,7 @@ export function Header() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="rounded-full neo-flat h-11 w-11 hover:neo-pressed transition-all"
+                        className="rounded-full neo-elevated h-11 w-11 hover:neo-inset transition-all"
                       >
                         <User className="h-5 w-5 text-primary" />
                       </Button>
@@ -141,7 +141,7 @@ export function Header() {
                       variant="ghost"
                       size="sm"
                       onClick={handleLogout}
-                      className="gap-2 rounded-xl hover:neo-flat hover:text-destructive transition-all"
+                      className="gap-2 rounded-xl hover:neo-elevated hover:text-destructive transition-all"
                     >
                       <LogOut className="h-4 w-4" />
                       {t("common.logout") || "Logout"}
@@ -154,7 +154,7 @@ export function Header() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="lg:hidden rounded-xl neo-flat"
+                className="lg:hidden rounded-xl neo-elevated"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
@@ -174,7 +174,7 @@ export function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-white/60 bg-white/70 backdrop-blur-xl"
+              className="lg:hidden border-t border-white/40 dark:border-white/10 bg-[#f0f0f3]/90 dark:bg-[hsl(240,10%,10%)]/90 backdrop-blur-xl"
             >
               <nav className="container mx-auto px-4 py-4 flex flex-col gap-2">
                 {navLinks.map((link) => {
@@ -189,7 +189,7 @@ export function Header() {
                         <Button
                           variant="ghost"
                           className={`w-full justify-start gap-3 rounded-xl ${
-                            isActive ? "neo-pressed text-primary font-semibold" : "hover:neo-flat"
+                            isActive ? "neo-inset text-emerald-600 dark:text-emerald-400 font-semibold" : "hover:neo-elevated"
                           }`}
                         >
                           <Icon className="h-5 w-5" />
@@ -204,7 +204,7 @@ export function Header() {
                     <Button
                       variant="ghost"
                       onClick={handleLogout}
-                      className="w-full justify-start gap-3 rounded-xl hover:neo-flat hover:text-destructive"
+                      className="w-full justify-start gap-3 rounded-xl hover:neo-elevated hover:text-destructive"
                     >
                       <LogOut className="h-5 w-5" />
                       {t("common.logout") || "Logout"}

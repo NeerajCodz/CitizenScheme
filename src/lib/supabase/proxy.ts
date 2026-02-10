@@ -97,21 +97,12 @@ export async function updateSession(request: NextRequest) {
 
   // Admin route protection
   if (user && pathname.startsWith("/admin")) {
-    const adminCheckUrl = new URL("/api/admin/check", request.url);
-    const adminRes = await fetch(adminCheckUrl, {
-      headers: {
-        cookie: request.headers.get("cookie") ?? "",
-      },
+    // Direct admin check using the same supabase client (no self-fetch)
+    const { data: adminData } = await supabase.rpc("is_admin", {
+      user_id: user.id,
     });
 
-    if (!adminRes.ok) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/home";
-      return NextResponse.redirect(url);
-    }
-
-    const { isAdmin } = (await adminRes.json()) as { isAdmin: boolean };
-    if (!isAdmin) {
+    if (!adminData) {
       const url = request.nextUrl.clone();
       url.pathname = "/home";
       return NextResponse.redirect(url);

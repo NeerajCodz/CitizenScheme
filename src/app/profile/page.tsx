@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -113,11 +113,11 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
+          className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full"
         />
       </div>
     );
@@ -152,8 +152,8 @@ export default function ProfilePage() {
 
     return (
       <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-          <Icon className="h-4 w-4 text-primary" />
+        <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+          <Icon className="h-4 w-4 text-emerald-600" />
           {label}
         </Label>
         {editing ? (
@@ -163,7 +163,7 @@ export default function ProfilePage() {
             onChange={(e) =>
               setEditedProfile({ ...editedProfile, [field]: e.target.value })
             }
-            className="neo-pressed border-0 focus-visible:ring-2 focus-visible:ring-primary rounded-xl"
+            className="neo-inset border-0 focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-xl text-foreground"
           />
         ) : (
           <p className="text-foreground font-medium pl-6">
@@ -175,11 +175,11 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
       <Header />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white py-12">
+      <section className="relative bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 text-white py-12">
         <div className="container max-w-4xl mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -207,20 +207,20 @@ export default function ProfilePage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="neo-flat rounded-2xl p-8"
+          className="neo-elevated-lg rounded-2xl p-8"
         >
           <div className="flex items-start justify-between mb-6">
             <div className="flex items-start gap-6">
               <motion.div whileHover={{ scale: 1.05 }} className="relative">
-                <Avatar className="h-24 w-24 border-4 border-primary neo-flat">
-                  <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+                <Avatar className="h-24 w-24 border-4 border-emerald-500 neo-elevated">
+                  <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-emerald-500 to-emerald-600 text-white">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
                 <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-green-500 border-4 border-background" />
               </motion.div>
               <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-2">
+                <h2 className="text-3xl font-bold mb-2 text-foreground">
                   {profile.full_name || "User"}
                 </h2>
                 <p className="text-muted-foreground mb-4 flex items-center gap-2">
@@ -229,9 +229,9 @@ export default function ProfilePage() {
                 </p>
                 <div className="flex gap-3 flex-wrap">
                   <Badge
-                    className={`neo-flat border-0 ${
+                    className={`neo-elevated border-0 ${
                       profile.id_verified
-                        ? "bg-green-600 text-white"
+                        ? "bg-emerald-600 text-white"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -243,9 +243,9 @@ export default function ProfilePage() {
                     ID {profile.id_verified ? "Verified" : "Not Verified"}
                   </Badge>
                   <Badge
-                    className={`neo-flat border-0 ${
+                    className={`neo-elevated border-0 ${
                       profile.face_verified
-                        ? "bg-green-600 text-white"
+                        ? "bg-emerald-600 text-white"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -257,9 +257,9 @@ export default function ProfilePage() {
                     Face {profile.face_verified ? "Verified" : "Not Verified"}
                   </Badge>
                   <Badge
-                    className={`neo-flat border-0 ${
+                    className={`neo-elevated border-0 ${
                       profile.onboarding_completed
-                        ? "bg-green-600 text-white"
+                        ? "bg-emerald-600 text-white"
                         : "bg-muted text-muted-foreground"
                     }`}
                   >
@@ -286,7 +286,7 @@ export default function ProfilePage() {
                 >
                   <Button
                     onClick={() => setEditing(true)}
-                    className="neo-flat hover:neo-pressed rounded-xl bg-primary text-primary-foreground"
+                    className="neo-btn-primary rounded-xl"
                   >
                     <Edit2 className="h-4 w-4 mr-2" />
                     Edit Profile
@@ -303,17 +303,15 @@ export default function ProfilePage() {
                   <Button
                     onClick={handleSave}
                     disabled={saving}
-                    className="neo-flat hover:neo-pressed rounded-xl bg-green-600 text-white"
+                    className="neo-btn-primary rounded-xl"
                   >
-                    <Save className="h-4 w-4
-
- mr-2" />
+                    <Save className="h-4 w-4 mr-2" />
                     {saving ? "Saving..." : "Save"}
                   </Button>
                   <Button
                     onClick={handleCancel}
                     variant="ghost"
-                    className="neo-flat hover:neo-pressed rounded-xl"
+                    className="neo-elevated hover:neo-inset rounded-xl"
                   >
                     <XIcon className="h-4 w-4 mr-2" />
                     Cancel
@@ -329,11 +327,11 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="neo-flat rounded-2xl p-6"
+          className="neo-elevated-lg rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <User className="h-5 w-5 text-primary" />
-            <h3 className="text-xl font-bold">Personal Information</h3>
+            <User className="h-5 w-5 text-emerald-600" />
+            <h3 className="text-xl font-bold text-foreground">Personal Information</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InfoField
@@ -369,17 +367,17 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="neo-flat rounded-2xl p-6"
+          className="neo-elevated-lg rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <MapPin className="h-5 w-5 text-primary" />
-            <h3 className="text-xl font-bold">Address</h3>
+            <MapPin className="h-5 w-5 text-emerald-600" />
+            <h3 className="text-xl font-bold text-foreground">Address</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
               <div className="space-y-2">
-                <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                  <MapPin className="h-4 w-4 text-primary" />
+                <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                  <MapPin className="h-4 w-4 text-emerald-600" />
                   Address
                 </Label>
                 <p className="text-foreground font-medium pl-6">
@@ -390,8 +388,8 @@ export default function ProfilePage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                <MapPin className="h-4 w-4 text-primary" />
+              <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                <MapPin className="h-4 w-4 text-emerald-600" />
                 District
               </Label>
               <p className="text-foreground font-medium pl-6">
@@ -399,8 +397,8 @@ export default function ProfilePage() {
               </p>
             </div>
             <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                <MapPin className="h-4 w-4 text-primary" />
+              <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                <MapPin className="h-4 w-4 text-emerald-600" />
                 State
               </Label>
               <p className="text-foreground font-medium pl-6">
@@ -408,8 +406,8 @@ export default function ProfilePage() {
               </p>
             </div>
             <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-                <MapPin className="h-4 w-4 text-primary" />
+              <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                <MapPin className="h-4 w-4 text-emerald-600" />
                 Pincode
               </Label>
               <p className="text-foreground font-medium pl-6">
@@ -424,11 +422,11 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="neo-flat rounded-2xl p-6"
+          className="neo-elevated-lg rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <Briefcase className="h-5 w-5 text-primary" />
-            <h3 className="text-xl font-bold">Additional Details</h3>
+            <Briefcase className="h-5 w-5 text-emerald-600" />
+            <h3 className="text-xl font-bold text-foreground">Additional Details</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <InfoField
@@ -439,7 +437,7 @@ export default function ProfilePage() {
             />
             <InfoField
               icon={IndianRupee}
-              label="Annual Income (₹)"
+              label="Annual Income (?)"
               value={profile.annual_income}
               field="annual_income"
               type="number"
@@ -464,16 +462,16 @@ export default function ProfilePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="neo-flat rounded-2xl p-6"
+          className="neo-elevated-lg rounded-2xl p-6"
         >
           <div className="flex items-center gap-2 mb-6">
-            <Shield className="h-5 w-5 text-primary" />
-            <h3 className="text-xl font-bold">Identity Documents</h3>
+            <Shield className="h-5 w-5 text-emerald-600" />
+            <h3 className="text-xl font-bold text-foreground">Identity Documents</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-2">
-                <Shield className="h-4 w-4 text-primary" />
+              <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600 mb-2">
+                <Shield className="h-4 w-4 text-emerald-600" />
                 Aadhaar Number
               </Label>
               <p className="text-foreground font-medium pl-6">
@@ -483,8 +481,8 @@ export default function ProfilePage() {
               </p>
             </div>
             <div>
-              <Label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground mb-2">
-                <Shield className="h-4 w-4 text-primary" />
+              <Label className="flex items-center gap-2 text-sm font-semibold text-slate-600 mb-2">
+                <Shield className="h-4 w-4 text-emerald-600" />
                 Voter ID
               </Label>
               <p className="text-foreground font-medium pl-6">
@@ -500,3 +498,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+

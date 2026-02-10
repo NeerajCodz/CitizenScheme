@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, TrendingUp, ArrowRight } from "lucide-react";
+import { CheckCircle2, TrendingUp, ArrowRight, Building2, Users } from "lucide-react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import "@/lib/i18n";
@@ -18,6 +18,7 @@ interface EligibleSchemeCardProps {
     category: string;
     benefits: string;
     eligibility_score?: number;
+    scheme_type?: "government" | "private";
   };
   index: number;
 }
@@ -35,6 +36,8 @@ export function EligibleSchemeCard({
     : "";
   const category = tDb(t, "schemes", schemeId, "category", scheme.category);
   const score = scheme.eligibility_score || 85;
+  const isPrivate = scheme.scheme_type === "private";
+  const scoreGradient = isPrivate ? "from-emerald-500 to-emerald-600" : "from-orange-500 to-orange-600";
 
   return (
     <motion.div
@@ -47,10 +50,10 @@ export function EligibleSchemeCard({
         <motion.div
           whileHover={{ y: -8, scale: 1.02 }}
           transition={{ duration: 0.3 }}
-          className="group relative h-full p-6 neo-flat hover:neo-convex rounded-2xl border-2 border-green-500/20 hover:border-green-500/40 transition-all duration-300 overflow-hidden"
+          className="group relative h-full p-6 neo-elevated-lg hover:neo-elevated-xl rounded-2xl transition-all duration-300 overflow-hidden"
         >
           {/* Match Score Indicator */}
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 flex flex-col items-end gap-1">
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
@@ -58,11 +61,14 @@ export function EligibleSchemeCard({
               transition={{ delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
               className="relative"
             >
-              <div className="bg-linear-to-br from-green-500 to-green-600 text-white px-3 py-1 rounded-full font-bold text-sm flex items-center gap-1">
+              <div className={`bg-linear-to-br ${scoreGradient} text-white px-3 py-1 rounded-full font-bold text-sm flex items-center gap-1`}>
                 <TrendingUp className="w-3 h-3" />
                 {score}% {t("common.match")}
               </div>
             </motion.div>
+            <Badge className={`text-[10px] ${isPrivate ? "bg-emerald-600 text-white border-emerald-600" : "bg-orange-500 text-white border-orange-500"}`}>
+              {isPrivate ? <><Users className="mr-1 h-2.5 w-2.5" />Org</> : <><Building2 className="mr-1 h-2.5 w-2.5" />Govt</>}
+            </Badge>
           </div>
 
           {/* Content */}
@@ -74,28 +80,28 @@ export function EligibleSchemeCard({
                 transition={{ duration: 0.5 }}
                 className="mt-1"
               >
-                <CheckCircle2 className="w-6 h-6 text-primary shrink-0" />
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
               </motion.div>
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-1">
+                <h3 className="text-lg font-bold text-slate-700 group-hover:text-emerald-600 transition-colors line-clamp-2 mb-1">
                   {name}
                 </h3>
-                <Badge className="bg-primary/10 text-primary border-primary/20">
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">
                   {category}
                 </Badge>
               </div>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-muted-foreground line-clamp-3">
+            <p className="text-sm text-slate-600 line-clamp-3">
               {description}
             </p>
 
             {/* Benefits */}
             {benefits && (
-              <div className="pt-3 border-t border-border/50">
-                <p className="text-xs text-muted-foreground line-clamp-2">
-                  <span className="font-semibold text-primary">{t("common.keyBenefit")}:</span>{" "}
+              <div className="pt-3 border-t border-slate-200">
+                <p className="text-xs text-slate-600 line-clamp-2">
+                  <span className="font-semibold text-emerald-600">{t("common.keyBenefit")}:</span>{" "}
                   {benefits.split(".")[0]}
                 </p>
               </div>
@@ -104,19 +110,14 @@ export function EligibleSchemeCard({
             {/* Action */}
             <motion.div
               whileHover={{ x: 5 }}
-              className="flex items-center gap-2 text-primary font-medium text-sm pt-2"
+              className="flex items-center gap-2 text-emerald-600 font-medium text-sm pt-2"
             >
               {t("common.applyNow")}
               <ArrowRight className="w-4 h-4" />
             </motion.div>
           </div>
 
-          {/* Glow Effect on Hover */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 0.6 }}
-            className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-orange-500/20 rounded-2xl blur-xl -z-10"
-          />
+          {/* Glow Effect removed for neomorphism */}
         </motion.div>
       </Link>
     </motion.div>

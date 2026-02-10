@@ -2,67 +2,85 @@
 @import "tw-animate-css";
 
 @theme {
-  /* ─── Indian Flag inspired Orange & Warm palette ─── */
-  --color-background: hsl(38 25% 95%);
-  --color-foreground: hsl(24 12% 10%);
-  --color-card: hsl(38 22% 93%);
-  --color-card-foreground: hsl(24 12% 10%);
-  --color-popover: hsl(38 22% 93%);
-  --color-popover-foreground: hsl(24 12% 10%);
+  /* ─── Neomorphism Gray + Emerald palette ─── */
+  --color-background: #e8e8eb;
+  --color-foreground: #334155;
+  --color-card: #f0f0f3;
+  --color-card-foreground: #334155;
+  --color-popover: #f0f0f3;
+  --color-popover-foreground: #334155;
   
-  /* Primary: Indian Flag Orange (Saffron) */
-  --color-primary: hsl(27 91% 55%);
-  --color-primary-foreground: hsl(0 0% 100%);
+  /* Primary: Emerald Green */
+  --color-primary: #10b981;
+  --color-primary-foreground: #ffffff;
   
-  --color-secondary: hsl(38 18% 89%);
-  --color-secondary-foreground: hsl(24 12% 20%);
-  --color-muted: hsl(38 16% 87%);
-  --color-muted-foreground: hsl(24 8% 42%);
+  --color-secondary: #e8e8eb;
+  --color-secondary-foreground: #334155;
+  --color-muted: #e0e0e3;
+  --color-muted-foreground: #64748b;
   
-  /* Accent: Complementary Orange tones */
-  --color-accent: hsl(27 85% 60%);
-  --color-accent-foreground: hsl(0 0% 100%);
+  /* Accent: Emerald tones */
+  --color-accent: #059669;
+  --color-accent-foreground: #ffffff;
   
   --color-destructive: hsl(0 62% 48%);
   --color-destructive-foreground: hsl(0 0% 100%);
   
-  /* Success: Indian Flag Green */
-  --color-success: hsl(145 55% 38%);
-  --color-success-foreground: hsl(0 0% 100%);
+  /* Success: Emerald */
+  --color-success: #10b981;
+  --color-success-foreground: #ffffff;
   
   --color-warning: hsl(38 90% 48%);
-  --color-warning-foreground: hsl(24 12% 12%);
-  --color-border: hsl(38 14% 82%);
-  --color-input: hsl(38 14% 82%);
+  --color-warning-foreground: #334155;
+  --color-border: rgba(163, 177, 198, 0.3);
+  --color-input: rgba(163, 177, 198, 0.3);
   
-  /* Ring: Orange focus */
-  --color-ring: hsl(27 91% 55%);
+  /* Ring: Emerald focus */
+  --color-ring: #10b981;
   
   --radius-lg: 1rem;
   --radius-md: 0.625rem;
   --radius-sm: 0.375rem;
-  --color-chart-1: hsl(27 91% 55%);
-  --color-chart-2: hsl(145 55% 38%);
+  --color-chart-1: #10b981;
+  --color-chart-2: #059669;
   --color-chart-3: hsl(220 65% 48%);
   --color-chart-4: hsl(38 90% 48%);
   --color-chart-5: hsl(280 60% 52%);
 
   /* ─── Neomorphism design tokens ─── */
-  --neo-bg: hsl(38 25% 95%);
-  --neo-shadow-light: hsl(38 20% 88%);
-  --neo-shadow-dark: hsl(30 12% 78%);
+  --neo-bg: #e8e8eb;
+  --neo-bg-alt: #f0f0f3;
+  --neo-shadow-dark: rgba(163, 177, 198, 0.5);
+  --neo-shadow-light: rgba(255, 255, 255, 0.9);
   
-  /* ─── Orange accent variations ─── */
-  --color-orange-50: hsl(33 100% 96%);
-  --color-orange-100: hsl(34 100% 92%);
-  --color-orange-200: hsl(32 98% 83%);
-  --color-orange-300: hsl(31 97% 72%);
-  --color-orange-400: hsl(27 96% 61%);
-  --color-orange-500: hsl(27 91% 55%);
-  --color-orange-600: hsl(25 88% 48%);
-  --color-orange-700: hsl(21 86% 40%);
-  --color-orange-800: hsl(19 79% 33%);
-  --color-orange-900: hsl(17 72% 28%);
+  /* Unified neomorphism colors */
+  --color-neo-gray-light: #f0f0f3;
+  --color-neo-gray-base: #e8e8eb;
+  --color-neo-gray-dark: #ececef;
+  
+  /* ─── Emerald accent variations ─── */
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+
+  /* ─── Orange (Saffron) secondary accent ─── */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
 }
 
 * {
@@ -72,6 +90,7 @@
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ─── Neomorphic scrollbars ─── */
@@ -364,13 +383,13 @@ body {
 /* ─── Dark Mode Theme ─── */
 .dark {
   --color-background: hsl(240 10% 8%);
-  --color-foreground: hsl(38 25% 95%);
+  --color-foreground: hsl(38 25% 90%);
   --color-card: hsl(240 10% 12%);
-  --color-card-foreground: hsl(38 25% 95%);
+  --color-card-foreground: hsl(38 25% 90%);
   --color-popover: hsl(240 10% 12%);
-  --color-popover-foreground: hsl(38 25% 95%);
+  --color-popover-foreground: hsl(38 25% 90%);
   
-  --color-primary: hsl(27 91% 55%);
+  --color-primary: #10b981;
   --color-primary-foreground: hsl(0 0% 100%);
   
   --color-secondary: hsl(240 10% 18%);
@@ -378,20 +397,20 @@ body {
   --color-muted: hsl(240 10% 16%);
   --color-muted-foreground: hsl(38 15% 65%);
   
-  --color-accent: hsl(27 85% 60%);
+  --color-accent: #059669;
   --color-accent-foreground: hsl(0 0% 100%);
   
   --color-destructive: hsl(0 62% 48%);
   --color-destructive-foreground: hsl(0 0% 100%);
   
-  --color-success: hsl(145 55% 45%);
+  --color-success: #10b981;
   --color-success-foreground: hsl(0 0% 100%);
   
   --color-warning: hsl(38 90% 55%);
   --color-warning-foreground: hsl(240 10% 10%);
   --color-border: hsl(240 10% 22%);
   --color-input: hsl(240 10% 22%);
-  --color-ring: hsl(27 91% 55%);
+  --color-ring: #10b981;
   
   /* Dark mode neomorphism */
   --neo-bg: hsl(240 10% 12%);
@@ -536,3 +555,388 @@ body {
   backdrop-filter: blur(16px);
 }
 
+/* ─── Unified Neomorphism System (Chat-inspired) ─── */
+/* Background surfaces */
+.neo-surface {
+  background: linear-gradient(to br, #ececef, #e8e8eb);
+}
+
+.neo-surface-alt {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+}
+
+.neo-surface-gradient {
+  background: linear-gradient(to b, #e8e8eb, #f0f0f3);
+}
+
+/* Raised/Elevated elements (buttons, cards) */
+.neo-elevated {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  box-shadow: 
+    5px 5px 12px rgba(163, 177, 198, 0.5),
+    -5px -5px 12px rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+}
+
+.neo-elevated-sm {
+
+
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  box-shadow: 
+    3px 3px 8px rgba(163, 177, 198, 0.4),
+    -3px -3px 8px rgba(255, 255, 255, 0.9);
+}
+
+.neo-elevated-lg {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  box-shadow: 
+    8px 8px 18px rgba(163, 177, 198, 0.5),
+    -6px -6px 14px rgba(255, 255, 255, 0.9);
+}
+
+.neo-elevated-xl {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  box-shadow: 
+    10px 10px 25px rgba(163, 177, 198, 0.6),
+    -10px -10px 25px rgba(255, 255, 255, 0.9);
+}
+
+/* Hover states for elevated elements */
+.neo-elevated:hover {
+  box-shadow: 
+    3px 3px 8px rgba(163, 177, 198, 0.4),
+    -3px -3px 8px rgba(255, 255, 255, 0.9);
+}
+
+/* Active/Pressed states */
+.neo-elevated:active {
+  box-shadow: 
+    inset 3px 3px 6px rgba(163, 177, 198, 0.3),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.5);
+}
+
+/* Inset/Pressed elements (inputs, active states) */
+.neo-inset {
+  background: #e8e8eb;
+  box-shadow: 
+    inset 4px 4px 10px rgba(163, 177, 198, 0.4),
+    inset -4px -4px 10px rgba(255, 255, 255, 0.9);
+}
+
+.neo-inset-sm {
+  background: #e8e8eb;
+  box-shadow: 
+    inset 3px 3px 6px rgba(163, 177, 198, 0.3),
+    inset -3px -3px 6px rgba(255, 255, 255, 0.8);
+}
+
+.neo-inset-lg {
+  background: #e8e8eb;
+  box-shadow: 
+    inset 6px 6px 14px rgba(163, 177, 198, 0.4),
+    inset -6px -6px 14px rgba(255, 255, 255, 0.9);
+}
+
+/* Input focus state */
+.neo-inset:focus-within {
+  box-shadow: 
+    inset 6px 6px 12px rgba(163, 177, 198, 0.5),
+    inset -3px -3px 8px rgba(255, 255, 255, 1);
+}
+
+/* Emerald primary buttons */
+.neo-btn-primary {
+  background: linear-gradient(to br, #10b981, #059669);
+  color: white;
+  box-shadow: 
+    6px 6px 14px rgba(16, 185, 129, 0.4),
+    -3px -3px 10px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.neo-btn-primary:hover {
+  background: linear-gradient(to br, #059669, #047857);
+  box-shadow: 
+    8px 8px 18px rgba(16, 185, 129, 0.5),
+    -4px -4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.neo-btn-primary:active {
+  box-shadow: inset 4px 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Orange/Saffron secondary buttons (government schemes) */
+.neo-btn-orange {
+  background: linear-gradient(to br, #f97316, #ea580c);
+  color: white;
+  box-shadow: 
+    6px 6px 14px rgba(249, 115, 22, 0.4),
+    -3px -3px 10px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.neo-btn-orange:hover {
+  background: linear-gradient(to br, #ea580c, #c2410c);
+  box-shadow: 
+    8px 8px 18px rgba(249, 115, 22, 0.5),
+    -4px -4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.neo-btn-orange:active {
+  box-shadow: inset 4px 4px 8px rgba(234, 88, 12, 0.3);
+}
+
+/* Government scheme accent (orange/saffron) */
+.neo-govt {
+  border-left: 4px solid #f97316;
+}
+
+.neo-govt-badge {
+  background: linear-gradient(to br, rgba(249, 115, 22, 0.15), rgba(234, 88, 12, 0.1));
+  color: #ea580c;
+}
+
+/* Private scheme accent (emerald/green) */
+.neo-private {
+  border-left: 4px solid #10b981;
+}
+
+.neo-private-badge {
+  background: linear-gradient(to br, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+  color: #059669;
+}
+
+/* Orange glow animation */
+@keyframes pulse-glow-orange {
+  0%, 100% { box-shadow: 0 0 20px rgba(249, 115, 22, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(249, 115, 22, 0.6), 0 0 60px rgba(249, 115, 22, 0.3); }
+}
+
+/* Container/Card with border */
+.neo-container {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  box-shadow: 
+    15px 15px 35px rgba(163, 177, 198, 0.7),
+    -15px -15px 35px rgba(255, 255, 255, 0.9);
+  border-radius: 1.5rem;
+}
+
+/* Active/Selected state */
+.neo-selected {
+  background: linear-gradient(to br, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.15));
+  box-shadow: 
+    inset 3px 3px 8px rgba(16, 185, 129, 0.2),
+    inset -3px -3px 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Message bubble styles */
+.neo-message-user {
+  background: linear-gradient(to br, #10b981, #059669);
+  color: white;
+  box-shadow: 
+    6px 6px 14px rgba(16, 185, 129, 0.4),
+    -4px -4px 10px rgba(255, 255, 255, 0.1);
+}
+
+.neo-message-assistant {
+  background: linear-gradient(to br, #f0f0f3, #e8e8eb);
+  color: #334155;
+  box-shadow: 
+    8px 8px 18px rgba(163, 177, 198, 0.5),
+    -6px -6px 14px rgba(255, 255, 255, 0.9);
+}
+
+/* Utility for text colors */
+.text-neo-primary {
+  color: #334155;
+}
+
+.text-neo-secondary {
+  color: #64748b;
+}
+
+.text-neo-muted {
+  color: #94a3b8;
+}
+
+/* ─── Dark Mode for Unified Neomorphism System ─── */
+.dark .neo-elevated,
+.dark .neo-elevated-sm,
+.dark .neo-elevated-lg,
+.dark .neo-elevated-xl {
+  background: linear-gradient(145deg, hsl(240 10% 14%), hsl(240 10% 11%));
+  border: 1px solid hsl(240 10% 18% / 0.5);
+}
+
+.dark .neo-elevated {
+  box-shadow: 
+    5px 5px 12px hsl(240 12% 6% / 0.7),
+    -5px -5px 12px hsl(240 10% 18% / 0.35);
+}
+
+.dark .neo-elevated-sm {
+  box-shadow: 
+    3px 3px 8px hsl(240 12% 6% / 0.6),
+    -3px -3px 8px hsl(240 10% 18% / 0.3);
+}
+
+.dark .neo-elevated-lg {
+  box-shadow: 
+    8px 8px 18px hsl(240 12% 6% / 0.8),
+    -6px -6px 14px hsl(240 10% 18% / 0.4);
+}
+
+.dark .neo-elevated-xl {
+  box-shadow: 
+    10px 10px 25px hsl(240 12% 6% / 0.9),
+    -10px -10px 25px hsl(240 10% 18% / 0.45);
+}
+
+.dark .neo-elevated:hover {
+  box-shadow: 
+    3px 3px 8px hsl(240 12% 6% / 0.6),
+    -3px -3px 8px hsl(240 10% 18% / 0.3);
+}
+
+.dark .neo-elevated:active {
+  box-shadow: 
+    inset 3px 3px 6px hsl(240 12% 6% / 0.5),
+    inset -3px -3px 6px hsl(240 10% 18% / 0.2);
+}
+
+.dark .neo-inset,
+.dark .neo-inset-sm,
+.dark .neo-inset-lg {
+  background: hsl(240 10% 10%);
+  border: 1px solid hsl(240 10% 16% / 0.4);
+}
+
+.dark .neo-inset {
+  box-shadow: 
+    inset 4px 4px 10px hsl(240 12% 6% / 0.6),
+    inset -4px -4px 10px hsl(240 10% 18% / 0.25);
+}
+
+.dark .neo-inset-sm {
+  box-shadow: 
+    inset 3px 3px 6px hsl(240 12% 6% / 0.5),
+    inset -3px -3px 6px hsl(240 10% 18% / 0.2);
+}
+
+.dark .neo-inset-lg {
+  box-shadow: 
+    inset 6px 6px 14px hsl(240 12% 6% / 0.6),
+    inset -6px -6px 14px hsl(240 10% 18% / 0.3);
+}
+
+.dark .neo-inset:focus-within {
+  box-shadow: 
+    inset 6px 6px 12px hsl(240 12% 6% / 0.7),
+    inset -3px -3px 8px hsl(240 10% 18% / 0.35),
+    0 0 0 2px hsl(152 69% 37%);
+}
+
+.dark .neo-btn-primary {
+  background: linear-gradient(145deg, #10b981, #059669);
+  box-shadow: 
+    6px 6px 14px hsl(152 69% 37% / 0.35),
+    -3px -3px 10px hsl(240 10% 18% / 0.15);
+}
+
+.dark .neo-btn-primary:hover {
+  background: linear-gradient(145deg, #059669, #047857);
+  box-shadow: 
+    8px 8px 18px hsl(152 69% 37% / 0.4),
+    -4px -4px 12px hsl(240 10% 18% / 0.2);
+}
+
+.dark .neo-btn-orange {
+  background: linear-gradient(145deg, #f97316, #ea580c);
+  box-shadow: 
+    6px 6px 14px rgba(249, 115, 22, 0.35),
+    -3px -3px 10px hsl(240 10% 18% / 0.15);
+}
+
+.dark .neo-btn-orange:hover {
+  background: linear-gradient(145deg, #ea580c, #c2410c);
+  box-shadow: 
+    8px 8px 18px rgba(249, 115, 22, 0.4),
+    -4px -4px 12px hsl(240 10% 18% / 0.2);
+}
+
+.dark .neo-govt {
+  border-left-color: #fb923c;
+}
+
+.dark .neo-govt-badge {
+  background: linear-gradient(145deg, rgba(249, 115, 22, 0.2), rgba(234, 88, 12, 0.15));
+  color: #fb923c;
+}
+
+.dark .neo-private {
+  border-left-color: #34d399;
+}
+
+.dark .neo-private-badge {
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.15));
+  color: #34d399;
+}
+
+.dark .neo-container {
+  background: linear-gradient(145deg, hsl(240 10% 14%), hsl(240 10% 11%));
+  box-shadow: 
+    15px 15px 35px hsl(240 12% 6% / 0.8),
+    -15px -15px 35px hsl(240 10% 18% / 0.4);
+  border: 1px solid hsl(240 10% 18% / 0.5);
+}
+
+.dark .neo-selected {
+  background: linear-gradient(145deg, hsl(152 69% 37% / 0.2), hsl(152 69% 37% / 0.15));
+  box-shadow: 
+    inset 3px 3px 8px hsl(152 69% 37% / 0.15),
+    inset -3px -3px 8px hsl(240 10% 18% / 0.2);
+}
+
+.dark .neo-message-user {
+  background: linear-gradient(145deg, #10b981, #059669);
+  box-shadow: 
+    6px 6px 14px hsl(152 69% 37% / 0.3),
+    -4px -4px 10px hsl(240 10% 18% / 0.15);
+}
+
+.dark .neo-message-assistant {
+  background: linear-gradient(145deg, hsl(240 10% 14%), hsl(240 10% 11%));
+  color: hsl(38 25% 90%);
+  box-shadow: 
+    8px 8px 18px hsl(240 12% 6% / 0.7),
+    -6px -6px 14px hsl(240 10% 18% / 0.35);
+}
+
+.dark .text-neo-primary { color: hsl(38 25% 90%); }
+.dark .text-neo-secondary { color: hsl(38 15% 70%); }
+.dark .text-neo-muted { color: hsl(38 15% 55%); }
+
+/* Dark mode background overrides for pages using hardcoded colors */
+.dark .from-\[\#e8e8eb\] { --tw-gradient-from: hsl(240 10% 8%); }
+.dark .to-\[\#e8e8eb\] { --tw-gradient-to: hsl(240 10% 8%); }
+.dark .via-\[\#f0f0f3\] { --tw-gradient-via: hsl(240 10% 10%); }
+.dark .from-\[\#f0f0f3\] { --tw-gradient-from: hsl(240 10% 10%); }
+.dark .to-\[\#f0f0f3\] { --tw-gradient-to: hsl(240 10% 10%); }
+.dark .from-\[\#ececef\] { --tw-gradient-from: hsl(240 10% 9%); }
+.dark .bg-\[\#e8e8eb\] { background-color: hsl(240 10% 10%); }
+.dark .bg-\[\#f0f0f3\] { background-color: hsl(240 10% 12%); }
+
+/* Dark mode text color overrides */
+.dark .text-slate-700 { color: hsl(38 25% 88%); }
+.dark .text-slate-600 { color: hsl(38 15% 70%); }
+.dark .text-slate-500 { color: hsl(38 15% 60%); }
+
+/* Dark mode for the neo-surface classes */
+.dark .neo-surface { background: linear-gradient(145deg, hsl(240 10% 10%), hsl(240 10% 8%)); }
+.dark .neo-surface-alt { background: linear-gradient(145deg, hsl(240 10% 12%), hsl(240 10% 8%)); }
+.dark .neo-surface-gradient { background: linear-gradient(to bottom, hsl(240 10% 8%), hsl(240 10% 12%)); }
+
+/* Dark mode border overrides for hardcoded colors */
+.dark .border-black\/5 { border-color: hsl(240 10% 20% / 0.4); }
+.dark .border-white\/40 { border-color: hsl(240 10% 20% / 0.3); }
+.dark .border-white\/10 { border-color: hsl(240 10% 20% / 0.2); }

@@ -46,11 +46,11 @@ export function FeaturedSchemeCard({
     : null;
   // Use gradient background instead of external logo service
   const gradients = [
-    "from-orange-400 to-orange-600",
-    "from-amber-400 to-orange-500",
-    "from-yellow-400 to-orange-400",
-    "from-red-400 to-orange-500",
-    "from-orange-500 to-red-500",
+    "from-emerald-400 to-emerald-600",
+    "from-teal-400 to-emerald-500",
+    "from-green-400 to-emerald-400",
+    "from-cyan-400 to-emerald-500",
+    "from-emerald-500 to-teal-500",
   ];
   const gradientClass = gradients[index % gradients.length];
 
@@ -64,7 +64,7 @@ export function FeaturedSchemeCard({
       <motion.div
         whileHover={{ scale: 1.02, y: -5 }}
         transition={{ duration: 0.3 }}
-        className="group relative h-full overflow-hidden border-2 border-transparent hover:border-primary/30 transition-all duration-300 neo-flat hover:neo-convex rounded-2xl"
+        className="group relative h-full overflow-hidden neo-elevated-lg hover:neo-elevated-xl transition-all duration-300 rounded-2xl"
       >
         <motion.div className="relative h-full">
           {/* Image Section */}
@@ -78,7 +78,7 @@ export function FeaturedSchemeCard({
             
             {/* Category Badge */}
             <div className="absolute top-4 left-4">
-                <Badge className="bg-primary text-primary-foreground font-semibold px-3 py-1">
+                <Badge className="bg-emerald-600 text-white font-semibold px-3 py-1 border-0">
                   {category}
               </Badge>
             </div>
@@ -86,14 +86,14 @@ export function FeaturedSchemeCard({
             {/* State Badge */}
             {state && (
               <div className="absolute top-4 right-4">
-                <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm neo-flat border-0">
+                <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm neo-inset border-0 text-slate-700">
                   {state}
                 </Badge>
               </div>
             )}
 
             {/* Featured Ribbon */}
-            <div className="absolute top-8 -right-10 bg-gradient-to-r from-green-500 to-green-600 text-white px-12 py-1 rotate-45 text-xs font-bold shadow-lg">
+            <div className="absolute top-8 -right-10 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-12 py-1 rotate-45 text-xs font-bold shadow-lg">
               FEATURED
             </div>
           </div>
@@ -101,19 +101,19 @@ export function FeaturedSchemeCard({
           {/* Content Section */}
           <div className="p-6 space-y-4">
             <div>
-              <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+              <h3 className="text-xl font-bold text-slate-700 group-hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
                 {name}
               </h3>
-              <p className="text-sm text-muted-foreground line-clamp-3">
+              <p className="text-sm text-slate-600 line-clamp-3">
                 {description}
               </p>
             </div>
 
             {/* Benefits Preview */}
             {benefits && (
-              <div className="pt-2 border-t border-border/50">
-                <p className="text-xs text-muted-foreground line-clamp-2">
-                  <span className="font-semibold text-primary">{t("common.benefits")}:</span>{" "}
+              <div className="pt-2 border-t border-slate-200">
+                <p className="text-xs text-slate-600 line-clamp-2">
+                  <span className="font-semibold text-emerald-600">{t("common.benefits")}:</span>{" "}
                   {benefits}
                 </p>
               </div>
@@ -125,7 +125,7 @@ export function FeaturedSchemeCard({
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full bg-primary text-primary-foreground px-4 py-2.5 rounded-lg font-medium text-sm flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
+                  className="neo-btn-primary w-full px-4 py-2.5 rounded-lg font-medium text-sm flex items-center justify-center gap-2"
                 >
                   {t("common.viewDetails")}
                   <ArrowRight className="w-4 h-4" />
@@ -139,20 +139,15 @@ export function FeaturedSchemeCard({
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-2.5 border-2 border-primary/20 hover:border-primary/40 rounded-lg transition-colors"
+                  className="neo-elevated p-2.5 rounded-lg hover:neo-elevated-sm transition-all"
                 >
-                  <ExternalLink className="w-4 h-4 text-primary" />
+                  <ExternalLink className="w-4 h-4 text-emerald-600" />
                 </motion.a>
               )}
             </div>
           </div>
 
-          {/* Hover Glow Effect */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 0.8 }}
-            className="absolute -inset-1 bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 rounded-2xl blur-lg -z-10"
-          />
+          {/* Hover Glow Effect - Removed */}
         </motion.div>
       </motion.div>
     </motion.div>

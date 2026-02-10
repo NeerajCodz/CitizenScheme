@@ -73,22 +73,22 @@ export default function OrgOnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border/50 bg-background/80 backdrop-blur-md">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
+      <header className="border-b border-white/40 dark:border-white/10 bg-[#f0f0f3]/80 dark:bg-[hsl(240,10%,10%)]/80 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-2xl items-center gap-2 px-4">
-          <Shield className="h-5 w-5 text-primary" />
-          <span className="font-semibold">Organization Onboarding</span>
+          <Shield className="h-5 w-5 text-emerald-600" />
+          <span className="font-semibold text-foreground">Organization Onboarding</span>
         </div>
       </header>
 
       <div className="mx-auto max-w-2xl px-4 py-10">
-        <div className="neo-card p-8">
+        <div className="neo-elevated-lg rounded-2xl p-8">
           <div className="mb-8 text-center">
-            <div className="neo-convex mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
-              <Building2 className="h-7 w-7 text-primary" />
+            <div className="neo-elevated mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
+              <Building2 className="h-7 w-7 text-emerald-600" />
             </div>
-            <h1 className="text-2xl font-bold">Register Your Organization</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <h1 className="text-2xl font-bold text-foreground">Register Your Organization</h1>
+            <p className="mt-2 text-sm text-slate-500">
               Complete your organization profile to start proposing welfare schemes.
             </p>
           </div>
@@ -97,7 +97,7 @@ export default function OrgOnboardingPage() {
             <div className="space-y-2">
               <Label>Organization Name *</Label>
               <Input
-                className="neo-input"
+                className="neo-inset border-0"
                 value={form.name}
                 onChange={(e) => update("name", e.target.value)}
                 placeholder="e.g. Rural Development Foundation"
@@ -107,7 +107,7 @@ export default function OrgOnboardingPage() {
             <div className="space-y-2">
               <Label>Work Email *</Label>
               <Input
-                className="neo-input"
+                className="neo-inset border-0"
                 type="email"
                 value={form.work_email}
                 onChange={(e) => update("work_email", e.target.value)}
@@ -121,7 +121,7 @@ export default function OrgOnboardingPage() {
             <div className="space-y-2">
               <Label>Description</Label>
               <Textarea
-                className="neo-input"
+                className="neo-inset border-0"
                 value={form.description}
                 onChange={(e) => update("description", e.target.value)}
                 rows={3}
@@ -133,7 +133,7 @@ export default function OrgOnboardingPage() {
               <div className="space-y-2">
                 <Label>Website</Label>
                 <Input
-                  className="neo-input"
+                  className="neo-inset border-0"
                   value={form.website}
                   onChange={(e) => update("website", e.target.value)}
                   placeholder="https://..."
@@ -142,7 +142,7 @@ export default function OrgOnboardingPage() {
               <div className="space-y-2">
                 <Label>State</Label>
                 <Select value={form.state} onValueChange={(v) => update("state", v)}>
-                  <SelectTrigger className="neo-input">
+                  <SelectTrigger className="neo-inset border-0">
                     <SelectValue placeholder="Select state" />
                   </SelectTrigger>
                   <SelectContent>
@@ -158,7 +158,7 @@ export default function OrgOnboardingPage() {
               <div className="space-y-2">
                 <Label>District</Label>
                 <Input
-                  className="neo-input"
+                  className="neo-inset border-0"
                   value={form.district}
                   onChange={(e) => update("district", e.target.value)}
                   placeholder="e.g. Coimbatore"
@@ -167,7 +167,7 @@ export default function OrgOnboardingPage() {
               <div className="space-y-2">
                 <Label>Address</Label>
                 <Input
-                  className="neo-input"
+                  className="neo-inset border-0"
                   value={form.address}
                   onChange={(e) => update("address", e.target.value)}
                   placeholder="Street address"
@@ -178,7 +178,7 @@ export default function OrgOnboardingPage() {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full h-12 rounded-xl"
+              className="w-full h-12 rounded-xl neo-btn-primary"
               size="lg"
             >
               {loading ? (

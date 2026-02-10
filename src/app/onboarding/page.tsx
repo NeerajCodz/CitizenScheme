@@ -34,6 +34,7 @@ import {
   Camera,
   Tags,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const STEPS = [
   // { title: "Upload ID", icon: FileUp }, // Disabled - ID upload is now optional
@@ -233,32 +234,33 @@ export default function OnboardingPage() {
   const progress = ((step + 1) / STEPS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
       {/* Header */}
-      <header className="neo-flat rounded-2xl">
+      <header className="neo-elevated rounded-2xl">
         <div className="mx-auto flex h-14 max-w-2xl items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-primary" />
-            <span className="font-semibold">Onboarding</span>
+            <Shield className="h-5 w-5 text-emerald-600" />
+            <span className="font-semibold text-foreground">Onboarding</span>
           </div>
-          <Badge variant="secondary" className="neo-flat">
+          <Badge variant="secondary" className="neo-elevated-sm">
             Step {step + 1} of {STEPS.length}
           </Badge>
+          <ThemeToggle />
         </div>
       </header>
 
       <div className="mx-auto max-w-2xl px-4 py-8">
         {/* Progress + Step Indicators */}
         <div className="mb-8">
-          <Progress value={progress} className="mb-4 neo-pressed" />
+          <Progress value={progress} className="mb-4 neo-inset" />
           <div className="flex justify-between">
             {STEPS.map((s, i) => (
               <div
                 key={s.title}
                 className={`flex items-center gap-1.5 text-xs ${
                   i <= step
-                    ? "font-medium text-primary"
-                    : "text-muted-foreground"
+                    ? "font-medium text-emerald-600"
+                    : "text-slate-500"
                 }`}
               >
                 {i < step ? (
@@ -274,9 +276,9 @@ export default function OnboardingPage() {
 
         {/* Step 0: Personal Details (was Step 1: Review Details) */}
         {step === 0 && (
-          <Card className="neo-card">
+          <Card className="neo-elevated-lg rounded-2xl border-0">
             <CardHeader>
-              <CardTitle>Personal Details</CardTitle>
+              <CardTitle className="text-foreground">Personal Details</CardTitle>
               <CardDescription>
                 Please enter your personal information. All fields marked with * are required.
               </CardDescription>
@@ -296,7 +298,7 @@ export default function OnboardingPage() {
               <div className="space-y-2">
                 <Label>Full Name *</Label>
                 <Input
-                  className="neo-input"
+                  className="neo-inset border-0"
                   value={editedData.full_name}
                   onChange={(e) =>
                     setEditedData({ ...editedData, full_name: e.target.value })
@@ -308,7 +310,7 @@ export default function OnboardingPage() {
                 <div className="space-y-2">
                   <Label>Date of Birth *</Label>
                   <Input
-                    className="neo-input"
+                    className="neo-inset border-0"
                     value={editedData.date_of_birth}
                     onChange={(e) =>
                       setEditedData({ ...editedData, date_of_birth: e.target.value })
@@ -322,7 +324,7 @@ export default function OnboardingPage() {
                     value={editedData.gender}
                     onValueChange={(v) => setEditedData({ ...editedData, gender: v })}
                   >
-                    <SelectTrigger className="neo-input">
+                    <SelectTrigger className="neo-inset border-0">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -340,7 +342,7 @@ export default function OnboardingPage() {
                   value={editedData.state}
                   onValueChange={(v) => setEditedData({ ...editedData, state: v })}
                 >
-                  <SelectTrigger className="neo-input">
+                  <SelectTrigger className="neo-inset border-0">
                     <SelectValue placeholder="Select state" />
                   </SelectTrigger>
                   <SelectContent>
@@ -352,7 +354,7 @@ export default function OnboardingPage() {
               </div>
 
               <div className="flex justify-end">
-                <Button variant="outline" onClick={handleDetailsReview} className="neo-btn text-foreground">
+                <Button variant="outline" onClick={handleDetailsReview} className="neo-btn-primary">
                   Continue to Additional Info
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -363,9 +365,9 @@ export default function OnboardingPage() {
 
         {/* Step 1: Additional Profile */}
         {step === 1 && (
-          <Card className="neo-card">
+          <Card className="neo-elevated-lg rounded-2xl border-0">
             <CardHeader>
-              <CardTitle>Additional Information</CardTitle>
+              <CardTitle className="text-foreground">Additional Information</CardTitle>
               <CardDescription>
                 This helps us find more schemes you might be eligible for. All fields are optional.
               </CardDescription>
@@ -375,7 +377,7 @@ export default function OnboardingPage() {
                 <Label>Phone Number</Label>
                 <Input
                   type="tel"
-                  className="neo-input"
+                  className="neo-inset border-0"
                   placeholder="10-digit mobile number"
                   value={profileData.phone}
                   onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
@@ -387,7 +389,7 @@ export default function OnboardingPage() {
                   <Label>Annual Income (INR)</Label>
                   <Input
                     type="number"
-                    className="neo-input"
+                    className="neo-inset border-0"
                     placeholder="e.g. 200000"
                     value={profileData.annual_income}
                     onChange={(e) => setProfileData({ ...profileData, annual_income: e.target.value })}
@@ -399,7 +401,7 @@ export default function OnboardingPage() {
                     value={profileData.caste_category}
                     onValueChange={(v) => setProfileData({ ...profileData, caste_category: v })}
                   >
-                    <SelectTrigger className="neo-input">
+                    <SelectTrigger className="neo-inset border-0">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -418,7 +420,7 @@ export default function OnboardingPage() {
                     value={profileData.occupation}
                     onValueChange={(v) => setProfileData({ ...profileData, occupation: v })}
                   >
-                    <SelectTrigger className="neo-input">
+                    <SelectTrigger className="neo-inset border-0">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
@@ -434,7 +436,7 @@ export default function OnboardingPage() {
                     value={profileData.disability_status}
                     onValueChange={(v) => setProfileData({ ...profileData, disability_status: v })}
                   >
-                    <SelectTrigger className="neo-input">
+                    <SelectTrigger className="neo-inset border-0">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -450,10 +452,10 @@ export default function OnboardingPage() {
               </div>
 
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep(0)} className="neo-convex">
+                <Button variant="outline" onClick={() => setStep(0)} className="neo-elevated rounded-xl">
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
-                <Button variant="outline" onClick={handleAdditionalInfo} className="flex-1 neo-btn text-foreground">
+                <Button variant="outline" onClick={handleAdditionalInfo} className="flex-1 neo-btn-primary">
                   Continue to Face Verification
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -466,13 +468,13 @@ export default function OnboardingPage() {
         {step === 2 && (
           <div className="space-y-4">
             {loading && (
-              <div className="flex items-center justify-center gap-2 text-primary">
+              <div className="flex items-center justify-center gap-2 text-emerald-600">
                 <Loader2 className="h-5 w-5 animate-spin" />
                 <span className="font-medium">Uploading face images...</span>
               </div>
             )}
             <FaceCapture onComplete={handleFaceComplete} />
-            <Button variant="outline" onClick={() => setStep(1)} disabled={loading} className="neo-convex">
+            <Button variant="outline" onClick={() => setStep(1)} disabled={loading} className="neo-elevated rounded-xl">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back
             </Button>
           </div>
@@ -480,9 +482,9 @@ export default function OnboardingPage() {
 
         {/* Step 3: Interest Tags */}
         {step === 3 && (
-          <Card className="neo-card">
+          <Card className="neo-elevated-lg rounded-2xl border-0">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-foreground">
                 <Tags className="h-5 w-5" />
                 Select Your Interests
               </CardTitle>
@@ -501,8 +503,8 @@ export default function OnboardingPage() {
                       onClick={() => toggleTag(tag)}
                       className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                         isSelected
-                          ? "neo-pressed text-primary"
-                          : "neo-flat hover:neo-convex"
+                          ? "neo-inset text-emerald-600 dark:text-emerald-400"
+                          : "neo-elevated hover:neo-elevated-sm"
                       }`}
                     >
                       {tag}
@@ -530,14 +532,14 @@ export default function OnboardingPage() {
               )}
 
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep(2)} className="neo-convex">
+                <Button variant="outline" onClick={() => setStep(2)} className="neo-elevated rounded-xl">
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 <Button
                   variant="outline"
                   onClick={handleComplete}
                   disabled={loading}
-                  className="flex-1 neo-btn text-foreground"
+                  className="flex-1 neo-btn-primary"
                   size="lg"
                 >
                   {loading ? (

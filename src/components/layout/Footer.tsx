@@ -61,7 +61,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative bg-linear-to-br from-white/60 via-white/40 to-white/60 border-t border-white/60 mt-20">
+    <footer className="relative bg-gradient-to-br from-[#e8e8eb]/60 via-[#f0f0f3]/40 to-[#e8e8eb]/60 dark:from-[hsl(240,10%,10%)]/60 dark:via-[hsl(240,10%,12%)]/40 dark:to-[hsl(240,10%,10%)]/60 border-t border-white/40 dark:border-white/10 mt-20">
       {/* Wave Divider */}
       <div className="absolute top-0 left-0 right-0 -translate-y-full">
         <svg
@@ -71,7 +71,7 @@ export function Footer() {
         >
           <path
             d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,0L0,0Z"
-            className="fill-white/80"
+            className="fill-[#f0f0f3] dark:fill-[hsl(240,10%,10%)]"
           />
         </svg>
       </div>
@@ -91,13 +91,13 @@ export function Footer() {
               <motion.div
                 whileHover={{ rotate: 360 }}
                 transition={{ duration: 0.6 }}
-                className="h-12 w-12 rounded-2xl neo-convex flex items-center justify-center relative overflow-hidden"
+                className="h-12 w-12 rounded-2xl neo-elevated flex items-center justify-center relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 opacity-90" />
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 opacity-90" />
                 <Sparkles className="h-6 w-6 text-white relative z-10" />
               </motion.div>
               <div>
-                <h3 className="text-xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-emerald-500 bg-clip-text text-transparent">
                   CitizenSchemes
                 </h3>
                 <p className="text-xs text-muted-foreground -mt-1">
@@ -129,7 +129,7 @@ export function Footer() {
           {/* Quick Links */}
           <motion.div variants={itemVariants}>
             <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <div className="h-5 w-1 bg-gradient-to-b from-orange-500 to-orange-600 rounded-full" />
+              <div className="h-5 w-1 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
               {t("footer.quickLinks") || "Quick Links"}
             </h4>
             <ul className="space-y-2">
@@ -149,7 +149,7 @@ export function Footer() {
           {/* Categories */}
           <motion.div variants={itemVariants}>
             <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <div className="h-5 w-1 bg-gradient-to-b from-green-500 to-green-600 rounded-full" />
+              <div className="h-5 w-1 bg-gradient-to-b from-emerald-500 to-teal-600 rounded-full" />
               {t("footer.categories") || "Categories"}
             </h4>
             <ul className="space-y-2">
@@ -169,7 +169,7 @@ export function Footer() {
           {/* Support */}
           <motion.div variants={itemVariants}>
             <h4 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-              <div className="h-5 w-1 bg-gradient-to-b from-orange-500 to-orange-600 rounded-full" />
+              <div className="h-5 w-1 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
               {t("footer.support") || "Support"}
             </h4>
             <ul className="space-y-2">
@@ -214,7 +214,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`h-10 w-10 rounded-xl neo-flat flex items-center justify-center text-muted-foreground ${social.color} transition-colors group`}
+                  className={`h-10 w-10 rounded-xl neo-elevated flex items-center justify-center text-muted-foreground ${social.color} transition-colors group`}
                   aria-label={social.label}
                 >
                   <Icon className="h-5 w-5" />
@@ -226,10 +226,10 @@ export function Footer() {
           {/* Government Badge */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl neo-flat"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl neo-elevated"
           >
             <div className="flex items-center gap-1">
-              <div className="h-4 w-4 rounded-full bg-orange-500" />
+              <div className="h-4 w-4 rounded-full bg-emerald-500" />
               <div className="h-4 w-4 rounded-full bg-white border border-border" />
               <div className="h-4 w-4 rounded-full bg-green-600" />
             </div>
@@ -243,3 +243,4 @@ export function Footer() {
     </footer>
   );
 }
+

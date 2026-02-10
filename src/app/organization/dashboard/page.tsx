@@ -3,61 +3,47 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import {
   Building2,
-  Plus,
   Loader2,
-  Shield,
   FileText,
+  ClipboardList,
   CheckCircle2,
   Clock,
-  XCircle,
-  LogOut,
+  TrendingUp,
+  ArrowRight,
+  Plus,
+  Users,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
 
-const CATEGORIES = [
-  "Agriculture", "Healthcare", "Housing", "Energy", "Education",
-  "Finance", "Social Welfare", "Women & Child", "Disability",
-];
-
-const INDIAN_STATES = [
-  "All India",
-  "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
-  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka",
-  "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram",
-  "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
-  "Delhi", "Jammu and Kashmir", "Ladakh",
-];
-
-interface SchemeRequest {
-  id: string;
-  scheme_data: Record<string, unknown>;
-  status: string;
-  admin_notes: string | null;
-  created_at: string;
+interface Analytics {
+  totalSchemes: number;
+  activeSchemes: number;
+  totalApplications: number;
+  pendingApplications: number;
+  approvedApplications: number;
+  rejectedApplications: number;
+  recentApplications: Array<{
+    id: string;
+    scheme_id: string;
+    status: string;
+    applied_at: string;
+    user_profiles: { full_name: string | null; email: string | null } | null;
+  }>;
+  schemeStats: Array<{
+    id: string;
+    scheme_name: string;
+    slug: string;
+    is_active: boolean;
+    total: number;
+    pending: number;
+    approved: number;
+    rejected: number;
+  }>;
 }
 
 interface Organization {
@@ -65,33 +51,25 @@ interface Organization {
   name: string;
   work_email: string;
   verified: boolean;
-  state: string | null;
+  logo_url: string | null;
+  description: string | null;
 }
 
 export default function OrgDashboardPage() {
   const router = useRouter();
   const [org, setOrg] = useState<Organization | null>(null);
-  const [requests, setRequests] = useState<SchemeRequest[]>([]);
+  const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  const [form, setForm] = useState({
-    scheme_name: "", scheme_code: "", description: "", benefits: "",
-    department: "", state: "", category: "", application_process: "",
-    official_website: "",
-    age_min: "", age_max: "", income_max: "",
-  });
 
   useEffect(() => {
     async function load() {
       try {
-        const [orgRes, reqRes] = await Promise.all([
+        const [orgRes, analyticsRes] = await Promise.all([
           fetch("/api/organization"),
-          fetch("/api/organization/schemes"),
+          fetch("/api/organization/analytics"),
         ]);
         const orgJson = await orgRes.json();
-        const reqJson = await reqRes.json();
+        const analyticsJson = await analyticsRes.json();
 
         if (!orgJson.organization) {
           router.push("/organization/onboarding");
@@ -99,7 +77,7 @@ export default function OrgDashboardPage() {
         }
 
         setOrg(orgJson.organization);
-        setRequests(reqJson.requests || []);
+        setAnalytics(analyticsJson);
       } catch {
         toast.error("Failed to load dashboard");
       } finally {
@@ -109,229 +87,194 @@ export default function OrgDashboardPage() {
     load();
   }, [router]);
 
-  const handleSubmitScheme = async () => {
-    if (!form.scheme_name.trim()) {
-      toast.error("Scheme name is required.");
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const eligibility_rules: Record<string, unknown> = {};
-      if (form.age_min || form.age_max) {
-        eligibility_rules.age = {};
-        if (form.age_min) (eligibility_rules.age as Record<string, number>).min = Number(form.age_min);
-        if (form.age_max) (eligibility_rules.age as Record<string, number>).max = Number(form.age_max);
-      }
-      if (form.income_max) eligibility_rules.income = { max: Number(form.income_max) };
-
-      const res = await fetch("/api/organization/schemes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          state: form.state === "All India" ? null : form.state || null,
-          eligibility_rules,
-        }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error);
-
-      toast.success("Scheme request submitted for admin review!");
-      setDialogOpen(false);
-      setForm({
-        scheme_name: "", scheme_code: "", description: "", benefits: "",
-        department: "", state: "", category: "", application_process: "",
-        official_website: "", age_min: "", age_max: "", income_max: "",
-      });
-
-      // Refresh requests
-      const reqRes = await fetch("/api/organization/schemes");
-      const reqJson = await reqRes.json();
-      setRequests(reqJson.requests || []);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Submission failed";
-      toast.error(msg);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
-
-  const update = (key: string, value: string) =>
-    setForm((prev) => ({ ...prev, [key]: value }));
-
-  const statusIcon = (s: string) => {
-    if (s === "approved") return <CheckCircle2 className="h-4 w-4 text-green-600" />;
-    if (s === "rejected") return <XCircle className="h-4 w-4 text-red-500" />;
-    return <Clock className="h-4 w-4 text-yellow-600" />;
-  };
-
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
     );
   }
 
+  if (!org || !analytics) return null;
+
+  const statCards = [
+    { title: "Total Schemes", value: analytics.totalSchemes, icon: FileText, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
+    { title: "Total Applications", value: analytics.totalApplications, icon: ClipboardList, color: "text-blue-600", bg: "bg-blue-50 dark:bg-blue-900/20" },
+    { title: "Pending Review", value: analytics.pendingApplications, icon: Clock, color: "text-yellow-600", bg: "bg-yellow-50 dark:bg-yellow-900/20" },
+    { title: "Approved", value: analytics.approvedApplications, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50 dark:bg-emerald-900/20" },
+  ];
+
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
-          <Link href="/organization/dashboard" className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-primary" />
-            <span className="font-bold">Org Dashboard</span>
-          </Link>
-          <Button variant="ghost" size="sm" onClick={handleLogout}>
-            <LogOut className="mr-2 h-4 w-4" /> Sign Out
+    <div className="p-6 space-y-6">
+      {/* Org Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl neo-elevated">
+            <Building2 className="h-7 w-7 text-emerald-600" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-foreground">{org.name}</h1>
+              <Badge variant={org.verified ? "success" : "secondary"}>
+                {org.verified ? "Verified" : "Pending"}
+              </Badge>
+            </div>
+            <p className="text-sm text-muted-foreground">{org.work_email}</p>
+          </div>
+        </div>
+        <Link href="/organization/dashboard/schemes">
+          <Button className="neo-btn-primary">
+            <Plus className="mr-2 h-4 w-4" />
+            New Scheme
           </Button>
-        </div>
-      </nav>
-
-      <div className="mx-auto max-w-5xl px-4 py-8">
-        {/* Org header */}
-        <div className="neo-card mb-8 flex items-center gap-4 p-6">
-          <div className="neo-convex flex h-14 w-14 items-center justify-center rounded-2xl">
-            <Building2 className="h-7 w-7 text-primary" />
-          </div>
-          <div className="flex-1">
-            <h1 className="text-xl font-bold">{org?.name}</h1>
-            <p className="text-sm text-muted-foreground">{org?.work_email}</p>
-          </div>
-          <Badge variant={org?.verified ? "success" : "secondary"}>
-            {org?.verified ? "Verified" : "Pending Verification"}
-          </Badge>
-        </div>
-
-        {/* Actions */}
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Scheme Requests ({requests.length})</h2>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button><Plus className="mr-2 h-4 w-4" /> New Scheme</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Propose a New Scheme</DialogTitle>
-                <DialogDescription>
-                  Fill in the details below. All fields are optional except the scheme name.
-                  The admin will review your request.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 pt-2">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Scheme Name *</Label>
-                    <Input value={form.scheme_name} onChange={(e) => update("scheme_name", e.target.value)} placeholder="Name" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Scheme Code</Label>
-                    <Input value={form.scheme_code} onChange={(e) => update("scheme_code", e.target.value)} placeholder="Code" />
-                  </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Category</Label>
-                    <Select value={form.category} onValueChange={(v) => update("category", v)}>
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>
-                        {CATEGORIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Location</Label>
-                    <Select value={form.state} onValueChange={(v) => update("state", v)}>
-                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
-                      <SelectContent>
-                        {INDIAN_STATES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Description</Label>
-                  <Textarea value={form.description} onChange={(e) => update("description", e.target.value)} rows={3} />
-                </div>
-                <div className="space-y-2">
-                  <Label>Benefits</Label>
-                  <Textarea value={form.benefits} onChange={(e) => update("benefits", e.target.value)} rows={2} />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label>Min Age</Label>
-                    <Input type="number" value={form.age_min} onChange={(e) => update("age_min", e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Max Age</Label>
-                    <Input type="number" value={form.age_max} onChange={(e) => update("age_max", e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Max Income (₹)</Label>
-                    <Input type="number" value={form.income_max} onChange={(e) => update("income_max", e.target.value)} />
-                  </div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Department</Label>
-                    <Input value={form.department} onChange={(e) => update("department", e.target.value)} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Website</Label>
-                    <Input value={form.official_website} onChange={(e) => update("official_website", e.target.value)} placeholder="https://..." />
-                  </div>
-                </div>
-                <Button onClick={handleSubmitScheme} disabled={submitting} className="w-full" size="lg">
-                  {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileText className="mr-2 h-4 w-4" />}
-                  {submitting ? "Submitting..." : "Submit for Review"}
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        {/* Requests list */}
-        {requests.length === 0 ? (
-          <div className="neo-card flex flex-col items-center gap-4 p-12 text-center">
-            <FileText className="h-12 w-12 text-muted-foreground" />
-            <p className="text-lg font-medium">No scheme requests yet</p>
-            <p className="text-sm text-muted-foreground">Click &quot;New Scheme&quot; to propose your first welfare scheme.</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {requests.map((r) => {
-              const sd = r.scheme_data as Record<string, string>;
-              return (
-                <div key={r.id} className="neo-card flex items-start justify-between gap-4 p-5">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      {statusIcon(r.status)}
-                      <h3 className="font-semibold">{sd.scheme_name || "Unnamed"}</h3>
-                    </div>
-                    <p className="text-sm text-muted-foreground line-clamp-1">{sd.description || "No description"}</p>
-                    {r.admin_notes && (
-                      <p className="mt-2 text-xs text-muted-foreground italic">Admin: {r.admin_notes}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end gap-1">
-                    <Badge variant={r.status === "approved" ? "success" : r.status === "rejected" ? "destructive" : "secondary"}>
-                      {r.status}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(r.created_at).toLocaleDateString("en-IN")}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        </Link>
       </div>
+
+      {/* Stats */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {statCards.map((c) => (
+          <div key={c.title} className="neo-elevated-lg rounded-2xl">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-slate-500">
+                {c.title}
+              </CardTitle>
+              <div className={`rounded-lg p-2 ${c.bg}`}>
+                <c.icon className={`h-4 w-4 ${c.color}`} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-foreground">{c.value}</div>
+            </CardContent>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Active Schemes */}
+        <div className="neo-elevated-lg rounded-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg text-foreground">Your Schemes</CardTitle>
+            <Link href="/organization/dashboard/schemes">
+              <Button variant="ghost" size="sm">
+                View All <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {analytics.schemeStats.length === 0 ? (
+              <div className="flex flex-col items-center gap-3 py-8 text-center">
+                <FileText className="h-10 w-10 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">No schemes yet. Create your first scheme!</p>
+                <Link href="/organization/dashboard/schemes">
+                  <Button size="sm" className="neo-btn-primary">
+                    <Plus className="mr-2 h-4 w-4" /> Create Scheme
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {analytics.schemeStats.slice(0, 5).map((s) => (
+                  <Link key={s.id} href={`/organization/dashboard/schemes/${s.id}/edit`}>
+                    <div className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted/50 transition-colors cursor-pointer">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{s.scheme_name}</p>
+                        <div className="flex gap-2 mt-1">
+                          <span className="text-xs text-muted-foreground">{s.total} apps</span>
+                          {s.pending > 0 && (
+                            <Badge variant="warning" className="text-[10px] px-1.5 py-0">{s.pending} pending</Badge>
+                          )}
+                        </div>
+                      </div>
+                      <Badge variant={s.is_active ? "success" : "secondary"} className="text-[10px]">
+                        {s.is_active ? "Active" : "Inactive"}
+                      </Badge>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </div>
+
+        {/* Recent Applications */}
+        <div className="neo-elevated-lg rounded-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg text-foreground">Recent Applications</CardTitle>
+            <Link href="/organization/dashboard/applications">
+              <Button variant="ghost" size="sm">
+                View All <ArrowRight className="ml-1 h-4 w-4" />
+              </Button>
+            </Link>
+          </CardHeader>
+          <CardContent>
+            {analytics.recentApplications.length === 0 ? (
+              <div className="flex flex-col items-center gap-3 py-8 text-center">
+                <Users className="h-10 w-10 text-muted-foreground" />
+                <p className="text-sm text-muted-foreground">No applications yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {analytics.recentApplications.map((app) => {
+                  const profile = app.user_profiles as { full_name: string | null; email: string | null } | null;
+                  return (
+                    <Link key={app.id} href={`/organization/dashboard/applications/${app.id}`}>
+                      <div className="flex items-center justify-between rounded-lg neo-elevated-sm p-3 hover:neo-inset transition-all cursor-pointer">
+                        <div>
+                          <p className="font-medium text-sm">{profile?.full_name || profile?.email || "Anonymous"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(app.applied_at).toLocaleDateString("en-IN")}
+                          </p>
+                        </div>
+                        <Badge
+                          variant={
+                            app.status === "approved" ? "success" :
+                            app.status === "rejected" ? "destructive" :
+                            app.status === "under_review" ? "warning" : "secondary"
+                          }
+                        >
+                          {app.status.replace("_", " ")}
+                        </Badge>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </div>
+      </div>
+
+      {/* Performance Overview */}
+      {analytics.totalApplications > 0 && (
+        <div className="neo-elevated-lg rounded-2xl">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2 text-foreground">
+              <TrendingUp className="h-5 w-5 text-emerald-600" />
+              Performance Overview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="text-center p-4 rounded-lg neo-inset">
+                <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">
+                  {analytics.totalApplications > 0
+                    ? Math.round((analytics.approvedApplications / analytics.totalApplications) * 100)
+                    : 0}%
+                </p>
+                <p className="text-sm text-muted-foreground mt-1">Approval Rate</p>
+              </div>
+              <div className="text-center p-4 rounded-lg neo-inset">
+                <p className="text-3xl font-bold text-blue-700 dark:text-blue-400">{analytics.activeSchemes}</p>
+                <p className="text-sm text-slate-500 mt-1">Active Schemes</p>
+              </div>
+              <div className="text-center p-4 rounded-lg neo-inset">
+                <p className="text-3xl font-bold text-yellow-700 dark:text-yellow-400">{analytics.pendingApplications}</p>
+                <p className="text-sm text-slate-500 mt-1">Awaiting Review</p>
+              </div>
+            </div>
+          </CardContent>
+        </div>
+      )}
     </div>
   );
 }

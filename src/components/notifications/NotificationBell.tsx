@@ -10,7 +10,7 @@ const NotificationBellClient = dynamic(
   {
     ssr: false,
     loading: () => (
-      <Button variant="ghost" size="icon" className="relative neo-flat">
+      <Button variant="ghost" size="icon" className="relative neo-elevated">
         <Bell className="h-5 w-5" />
       </Button>
     ),

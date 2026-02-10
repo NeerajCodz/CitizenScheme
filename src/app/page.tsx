@@ -41,7 +41,7 @@ const features = [
     title: "AI-Powered OCR",
     description:
       "Upload your Aadhaar or Voter ID — our AI instantly extracts your details with Gemini Vision.",
-    color: "from-orange-400 to-orange-600",
+    color: "from-emerald-400 to-emerald-600",
   },
   {
     icon: ScanFace,
@@ -81,7 +81,7 @@ const features = [
 ];
 
 const stats = [
-  { icon: Globe, value: "10+", label: "Government Schemes", color: "text-orange-500" },
+  { icon: Globe, value: "10+", label: "Government Schemes", color: "text-emerald-500" },
   { icon: Users, value: "100%", label: "Free to Use", color: "text-green-500" },
   { icon: IndianRupee, value: "₹6L+", label: "Avg. Benefits Value", color: "text-blue-500" },
   { icon: Award, value: "99%", label: "Accuracy Rate", color: "text-purple-500" },
@@ -127,8 +127,8 @@ const benefits = [
   },
   {
     icon: Lock,
-    title: "Bank-Grade Security",
-    description: "Your data is encrypted and never shared with third parties",
+    title: "High-Grade Security",
+    description: "Your data is never shared with third parties",
   },
   {
     icon: TrendingUp,
@@ -183,22 +183,22 @@ export default function LandingPage() {
   const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30 text-foreground overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
       {/* Navigation - Neomorphic */}
-      <nav className="sticky top-0 z-50 bg-white/60 backdrop-blur-xl border-b border-white/60 shadow-[0_12px_30px_rgba(15,23,42,0.12)]">
+      <nav className="sticky top-0 z-50 bg-gradient-to-r from-[#ececef] to-[#e8e8eb] backdrop-blur-xl border-b border-black/5 shadow-[0_8px_20px_rgba(163,177,198,0.3)]">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="neo-pressed flex h-12 w-12 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">
-              <Shield className="h-6 w-6 text-primary" />
+            <div className="neo-elevated flex h-12 w-12 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">
+              <Shield className="h-6 w-6 text-emerald-600" />
             </div>
-            <span className="text-xl font-extrabold tracking-tight bg-linear-to-r from-primary to-orange-700 bg-clip-text text-transparent">
+            <span className="text-xl font-extrabold tracking-tight text-slate-700">
               Citizen Copilot
             </span>
           </Link>
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <Link href="/login">
-              <Button className="neo-btn group px-8 py-6 text-base font-semibold bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition-all duration-300">
+              <Button className="neo-btn-primary group px-8 py-6 text-base font-semibold rounded-2xl transition-all duration-300">
                 Get Started 
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
@@ -214,7 +214,7 @@ export default function LandingPage() {
           style={{ opacity, scale }}
           className="absolute inset-0 -z-10"
         >
-          <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200/30 rounded-full blur-3xl animate-float" />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200/30 rounded-full blur-3xl animate-float" />
           <div className="absolute top-40 right-10 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "1s" }} />
           <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-purple-200/20 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }} />
         </motion.div>
@@ -227,30 +227,30 @@ export default function LandingPage() {
           >
             {/* Badge */}
             <motion.div
-              className="neo-card inline-flex items-center gap-2 px-6 py-3 mb-8"
+              className="neo-elevated inline-flex items-center gap-2 px-6 py-3 mb-8 rounded-full"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <Radio className="h-4 w-4 text-primary animate-pulse" />
-              <span className="text-sm font-semibold bg-linear-to-r from-primary to-orange-600 bg-clip-text text-transparent">
+              <Radio className="h-4 w-4 text-emerald-600 animate-pulse" />
+              <span className="text-sm font-semibold text-emerald-600">
                 AI-Powered Welfare Discovery Platform
               </span>
             </motion.div>
 
             {/* Main Heading */}
-            <h1 className="mt-6 text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="mt-6 text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl text-slate-700">
               <span className="block">Discover Government Benefits</span>
-              <span className="block mt-2 bg-linear-to-r from-primary via-orange-600 to-orange-700 bg-clip-text text-transparent">
+              <span className="block mt-2 bg-gradient-to-r from-emerald-600 to-emerald-700 bg-clip-text text-transparent">
                 You Actually Deserve
               </span>
             </h1>
 
             {/* Subheading */}
-            <p className="mx-auto mt-8 max-w-3xl text-xl text-muted-foreground leading-relaxed">
+            <p className="mx-auto mt-8 max-w-3xl text-xl text-slate-600 leading-relaxed">
               Upload your ID, verify your identity with cutting-edge AI, and discover 
-              <span className="font-bold text-primary"> every government welfare scheme </span>
+              <span className="font-bold text-emerald-600"> every government welfare scheme </span>
               you&apos;re eligible for — all in just 
-              <span className="font-bold text-primary"> 2 minutes</span>.
+              <span className="font-bold text-emerald-600"> 2 minutes</span>.
             </p>
           </motion.div>
 
@@ -262,13 +262,13 @@ export default function LandingPage() {
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <Link href="/login">
-              <Button size="lg" className="neo-btn group px-10 py-7 text-lg font-bold shadow-2xl bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 transition-all duration-300">
+              <Button size="lg" className="neo-btn-primary group px-10 py-7 text-lg font-bold rounded-2xl">
                 <Rocket className="mr-2 h-5 w-5 transition-transform group-hover:-translate-y-1" />
                 Start Free Now
               </Button>
             </Link>
             <Link href="#how-it-works">
-              <Button variant="outline" size="lg" className="neo-convex px-10 py-7 text-lg font-bold border-2 border-primary text-primary hover:bg-primary/10">
+              <Button variant="outline" size="lg" className="neo-elevated px-10 py-7 text-lg font-bold text-emerald-600 hover:neo-inset-sm rounded-2xl">
                 See How It Works
               </Button>
             </Link>
@@ -281,11 +281,11 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
           >
-            <div className="neo-card p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="neo-elevated-lg p-8 grid grid-cols-2 md:grid-cols-4 gap-6 rounded-3xl">
               {stats.map((s, i) => (
                 <motion.div
                   key={s.label}
-                  className="neo-pressed p-6 rounded-xl text-center hover:neo-convex transition-all cursor-pointer group"
+                  className="neo-inset p-6 rounded-xl text-center hover:neo-elevated-sm transition-all cursor-pointer group"
                   whileHover={{ scale: 1.05 }}
                   custom={i}
                   initial="hidden"
@@ -293,10 +293,10 @@ export default function LandingPage() {
                   variants={fadeUp}
                 >
                   <s.icon className={`mx-auto mb-3 h-8 w-8 ${s.color} transition-transform group-hover:scale-110`} />
-                  <div className="text-3xl font-black bg-linear-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
+                  <div className="text-3xl font-black text-slate-700">
                     {s.value}
                   </div>
-                  <div className="text-xs font-medium text-muted-foreground mt-1">
+                  <div className="text-xs font-medium text-slate-500 mt-1">
                     {s.label}
                   </div>
                 </motion.div>
@@ -316,7 +316,7 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="neo-pressed inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
+              <span className="neo-inset inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
                 Powerful Features
               </span>
               <h2 className="text-4xl md:text-5xl font-black tracking-tight">
@@ -341,9 +341,9 @@ export default function LandingPage() {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
               >
-                <div className="neo-card h-full p-8 group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+                <div className="neo-elevated-lg rounded-2xl h-full p-8 group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
                   {/* Icon with gradient */}
-                  <div className="neo-flat mb-6 flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 group-hover:rotate-3">
+                  <div className="neo-elevated mb-6 flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 group-hover:rotate-3">
                     <f.icon className="h-8 w-8 text-primary" />
                   </div>
                   <h3 className="mb-3 text-xl font-bold text-foreground">{f.title}</h3>
@@ -391,7 +391,7 @@ export default function LandingPage() {
                 }`}
               >
                 <div className="flex-1">
-                  <div className="neo-card p-12 max-w-md hover:scale-105 transition-all duration-300 cursor-pointer">
+                  <div className="neo-elevated-lg rounded-2xl p-12 max-w-md hover:scale-105 transition-all duration-300 cursor-pointer">
                     <h3 className="text-2xl font-black mb-4 text-foreground">{benefit.title}</h3>
                     <p className="text-muted-foreground text-lg leading-relaxed">
                       {benefit.description}
@@ -399,8 +399,8 @@ export default function LandingPage() {
                   </div>
                 </div>
                 <div className="flex-1 flex justify-center">
-                  <div className="neo-flat p-16 rounded-3xl relative">
-                    <div className="neo-pressed w-48 h-48 rounded-3xl flex items-center justify-center">
+                  <div className="neo-elevated p-16 rounded-3xl relative">
+                    <div className="neo-inset w-48 h-48 rounded-3xl flex items-center justify-center">
                       <benefit.icon className="h-24 w-24 text-primary animate-float" />
                     </div>
                   </div>
@@ -420,7 +420,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="neo-pressed inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
+            <span className="neo-inset inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
               Simple Process
             </span>
             <h2 className="text-4xl md:text-5xl font-black">
@@ -436,7 +436,7 @@ export default function LandingPage() {
 
           <div className="relative">
             {/* Timeline connector */}
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 neo-pressed -translate-y-1/2" />
+            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 neo-inset -translate-y-1/2" />
             
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4 relative">
               {steps.map((s, i) => (
@@ -449,14 +449,14 @@ export default function LandingPage() {
                   viewport={{ once: true }}
                   className="relative"
                 >
-                  <div className="neo-card p-8 text-center group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+                  <div className="neo-elevated-lg rounded-2xl p-8 text-center group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
                     {/* Step number badge */}
-                    <div className="neo-flat absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl flex items-center justify-center bg-primary text-white font-black text-xl shadow-2xl group-hover:scale-110 transition-transform">
+                    <div className="neo-elevated absolute -top-6 left-1/2 -translate-x-1/2 w-14 h-14 rounded-2xl flex items-center justify-center bg-primary text-white font-black text-xl shadow-2xl group-hover:scale-110 transition-transform">
                       {s.step}
                     </div>
                     
                     {/* Icon */}
-                    <div className="mt-6 neo-flat inline-flex p-6 rounded-2xl mb-6 transition-all group-hover:scale-110 group-hover:neo-convex">
+                    <div className="mt-6 neo-elevated inline-flex p-6 rounded-2xl mb-6 transition-all group-hover:scale-110 group-hover:neo-elevated">
                       <s.icon className="h-10 w-10 text-primary" />
                     </div>
                     
@@ -481,7 +481,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="neo-pressed inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
+            <span className="neo-inset inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
               Success Stories
             </span>
             <h2 className="text-4xl md:text-5xl font-black">
@@ -502,11 +502,11 @@ export default function LandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                <div className="neo-card p-8 h-full group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
+                <div className="neo-elevated-lg rounded-2xl p-8 h-full group hover:scale-105 hover:shadow-2xl transition-all duration-300 cursor-pointer">
                   {/* Rating */}
                   <div className="flex gap-1 mb-6">
                     {[...Array(t.rating)].map((_, idx) => (
-                      <Star key={idx} className="h-5 w-5 fill-orange-400 text-orange-400 group-hover:scale-110 transition-transform" />
+                      <Star key={idx} className="h-5 w-5 fill-emerald-400 text-emerald-400 group-hover:scale-110 transition-transform" />
                     ))}
                   </div>
                   
@@ -517,7 +517,7 @@ export default function LandingPage() {
                   </p>
                   
                   {/* Author */}
-                  <div className="neo-pressed p-4 rounded-xl group-hover:neo-flat transition-all">
+                  <div className="neo-inset p-4 rounded-xl group-hover:neo-elevated transition-all">
                     <div className="font-bold text-foreground">{t.name}</div>
                     <div className="text-sm text-muted-foreground">{t.role}</div>
                   </div>
@@ -537,7 +537,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="neo-pressed inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
+            <span className="neo-inset inline-block px-6 py-2 rounded-full text-sm font-bold text-primary mb-4">
               Popular Schemes
             </span>
             <h2 className="text-4xl md:text-5xl font-black">
@@ -556,7 +556,7 @@ export default function LandingPage() {
               { name: "PM-KISAN Samman Nidhi", icon: IndianRupee, color: "from-green-400 to-green-600" },
               { name: "Ayushman Bharat (PMJAY)", icon: Heart, color: "from-red-400 to-red-600" },
               { name: "PM Awas Yojana", icon: Shield, color: "from-blue-400 to-blue-600" },
-              { name: "PM Ujjwala Yojana", icon: Zap, color: "from-orange-400 to-orange-600" },
+              { name: "PM Ujjwala Yojana", icon: Zap, color: "from-emerald-400 to-emerald-600" },
               { name: "National Scholarship Portal", icon: Award, color: "from-purple-400 to-purple-600" },
               { name: "Sukanya Samriddhi Yojana", icon: Star, color: "from-pink-400 to-pink-600" },
             ].map((scheme, i) => (
@@ -568,21 +568,21 @@ export default function LandingPage() {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                <div className="neo-card p-6 group hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
+                <div className="neo-elevated-lg rounded-2xl p-6 group hover:scale-105 hover:shadow-xl transition-all duration-300 cursor-pointer h-full">
                   <div className="flex items-center gap-4">
-                    <div className={`neo-flat p-4 rounded-xl shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-6 ${
+                    <div className={`neo-elevated p-4 rounded-xl shrink-0 transition-transform group-hover:scale-110 group-hover:rotate-6 ${
                       scheme.name.includes('KISAN') ? 'bg-green-100' :
                       scheme.name.includes('Ayushman') ? 'bg-red-100' :
                       scheme.name.includes('Awas') ? 'bg-blue-100' :
-                      scheme.name.includes('Ujjwala') ? 'bg-orange-100' :
+                      scheme.name.includes('Ujjwala') ? 'bg-emerald-100' :
                       scheme.name.includes('Scholarship') ? 'bg-purple-100' :
                       'bg-pink-100'
                     }`}>
                       <scheme.icon className={`h-6 w-6 ${
-                        scheme.name.includes('KISAN') ? 'text-green-600' :
+                        scheme.name.includes('KISAN') ? 'text-emerald-600' :
                         scheme.name.includes('Ayushman') ? 'text-red-600' :
                         scheme.name.includes('Awas') ? 'text-blue-600' :
-                        scheme.name.includes('Ujjwala') ? 'text-orange-600' :
+                        scheme.name.includes('Ujjwala') ? 'text-emerald-600' :
                         scheme.name.includes('Scholarship') ? 'text-purple-600' :
                         'text-pink-600'
                       }`} />
@@ -603,7 +603,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
           >
             <Link href="/schemes">
-              <Button size="lg" variant="outline" className="neo-btn px-8 py-6 text-base font-semibold border-2 border-primary text-primary hover:bg-primary/10">
+              <Button size="lg" variant="outline" className="neo-btn-primary px-8 py-6 text-base font-semibold border-2 border-primary text-primary hover:bg-primary/10">
                 View All Schemes
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -616,7 +616,7 @@ export default function LandingPage() {
       <section className="py-32">
         <div className="mx-auto max-w-7xl px-6">
           <motion.div
-            className="neo-card p-16 text-center"
+            className="neo-elevated-lg rounded-2xl p-16 text-center"
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -642,7 +642,7 @@ export default function LandingPage() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className="neo-pressed p-8 rounded-2xl group hover:scale-110 hover:neo-flat transition-all duration-300 cursor-pointer"
+                  className="neo-inset p-8 rounded-2xl group hover:scale-110 hover:neo-elevated transition-all duration-300 cursor-pointer"
                 >
                   <item.icon className="h-12 w-12 mx-auto mb-4 text-primary transition-all group-hover:scale-125 group-hover:text-accent" />
                   <div className="font-bold text-lg mb-1 text-foreground">{item.label}</div>
@@ -687,13 +687,13 @@ export default function LandingPage() {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
-                  className={`neo-card p-6 cursor-pointer transition-all duration-300 group ${
+                  className={`neo-elevated-lg rounded-2xl p-6 cursor-pointer transition-all duration-300 group ${
                     activeTab === i ? "scale-105 shadow-xl border-2 border-primary" : "hover:scale-105 hover:shadow-lg"
                   }`}
                   onClick={() => setActiveTab(i)}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`neo-pressed p-4 rounded-xl transition-all duration-300 ${
+                    <div className={`neo-inset p-4 rounded-xl transition-all duration-300 ${
                       activeTab === i ? "bg-primary scale-110" : "group-hover:scale-110 group-hover:rotate-6"
                     }`}>
                       <item.icon className={`h-6 w-6 ${activeTab === i ? "text-white" : "text-primary"}`} />
@@ -709,13 +709,13 @@ export default function LandingPage() {
 
             {/* Visual Display */}
             <motion.div
-              className="neo-flat p-12 rounded-3xl flex items-center justify-center"
+              className="neo-elevated p-12 rounded-3xl flex items-center justify-center"
               key={activeTab}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="neo-pressed w-80 h-80 rounded-3xl flex items-center justify-center relative overflow-hidden">
+              <div className="neo-inset w-80 h-80 rounded-3xl flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-orange-500/10" />
                 {activeTab === 0 && <Brain className="h-32 w-32 text-primary animate-float relative z-10" />}
                 {activeTab === 1 && <Fingerprint className="h-32 w-32 text-primary animate-float relative z-10" />}
@@ -735,15 +735,15 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="neo-card p-16 text-center relative overflow-hidden"
+            className="neo-elevated-lg rounded-2xl p-16 text-center relative overflow-hidden"
           >
             {/* Decorative elements */}
-            <div className="absolute top-10 right-10 neo-pressed w-24 h-24 rounded-full animate-float" />
-            <div className="absolute bottom-10 left-10 neo-pressed w-32 h-32 rounded-full animate-float" style={{ animationDelay: "1s" }} />
+            <div className="absolute top-10 right-10 neo-inset w-24 h-24 rounded-full animate-float" />
+            <div className="absolute bottom-10 left-10 neo-inset w-32 h-32 rounded-full animate-float" style={{ animationDelay: "1s" }} />
             
             <div className="relative z-10">
               <motion.div
-                className="neo-pressed inline-flex items-center gap-2 px-6 py-3 rounded-full mb-8"
+                className="neo-inset inline-flex items-center gap-2 px-6 py-3 rounded-full mb-8"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -767,7 +767,7 @@ export default function LandingPage() {
                 <Link href="/login">
                   <Button
                     size="lg"
-                    className="neo-btn group px-12 py-8 text-xl font-bold shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700"
+                    className="neo-btn-primary group px-12 py-8 text-xl font-bold shadow-2xl hover:scale-105 transition-all duration-300 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700"
                   >
                     <Sparkles className="mr-2 h-6 w-6" />
                     Get Started Free
@@ -776,7 +776,7 @@ export default function LandingPage() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="neo-convex px-12 py-8 text-xl font-bold hover:scale-105 transition-all duration-300 border-2 border-primary text-primary hover:bg-primary/10"
+                  className="neo-elevated px-12 py-8 text-xl font-bold hover:scale-105 transition-all duration-300 border-2 border-primary text-primary hover:bg-primary/10"
                 >
                   <MessageSquare className="mr-2 h-6 w-6" />
                   Talk to Support
@@ -806,12 +806,12 @@ export default function LandingPage() {
       {/* Footer - Neomorphic */}
       <footer className="py-16 relative">
         <div className="mx-auto max-w-7xl px-6">
-          <div className="neo-card p-12 rounded-3xl">
+          <div className="neo-elevated-lg rounded-2xl p-12 rounded-3xl">
             <div className="grid md:grid-cols-4 gap-12 mb-12">
               {/* Brand */}
               <div className="md:col-span-2">
                 <Link href="/" className="flex items-center gap-3 mb-6 group">
-                  <div className="neo-pressed flex h-14 w-14 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">
+                  <div className="neo-inset flex h-14 w-14 items-center justify-center rounded-2xl transition-transform group-hover:scale-105">
                     <Shield className="h-7 w-7 text-primary" />
                   </div>
                   <span className="text-2xl font-extrabold tracking-tight bg-linear-to-r from-primary to-orange-700 bg-clip-text text-transparent">
@@ -826,7 +826,7 @@ export default function LandingPage() {
                   {[Shield, Heart, Star, Award].map((Icon, i) => (
                     <motion.div
                       key={i}
-                      className="neo-pressed p-3 rounded-xl cursor-pointer hover:neo-flat transition-all"
+                      className="neo-inset p-3 rounded-xl cursor-pointer hover:neo-elevated transition-all"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -866,7 +866,7 @@ export default function LandingPage() {
             </div>
 
             {/* Bottom bar */}
-            <div className="neo-pressed p-6 rounded-xl">
+            <div className="neo-inset p-6 rounded-xl">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
                 <p>
                   &copy; {new Date().getFullYear()} Citizen Copilot. Built for citizens, by citizens.
@@ -883,3 +883,4 @@ export default function LandingPage() {
     </div>
   );
 }
+

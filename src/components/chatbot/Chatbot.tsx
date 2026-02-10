@@ -239,7 +239,7 @@ export default function Chatbot({ mode = "floating", containerClassName }: Chatb
       {!isPage && (
         <button
           onClick={() => setOpen(!open)}
-          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-green-600 text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95"
+          className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-[8px_8px_18px_rgba(16,185,129,0.5),-4px_-4px_12px_rgba(255,255,255,0.2)] transition-all hover:scale-105 hover:shadow-[10px_10px_22px_rgba(16,185,129,0.6),-5px_-5px_15px_rgba(255,255,255,0.3)] active:scale-95 active:shadow-[inset_5px_5px_12px_rgba(16,185,129,0.4)]"
           aria-label={open ? "Close chat" : "Open chat"}
         >
           {open ? (
@@ -255,19 +255,19 @@ export default function Chatbot({ mode = "floating", containerClassName }: Chatb
         <div
           className={
             isPage
-              ? `flex h-[calc(100vh-180px)] w-full flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-2xl ${containerClassName || ""}`
-              : "fixed bottom-24 right-6 z-50 flex h-130 w-95 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl sm:w-105"
+              ? `flex h-[calc(100vh-180px)] w-full flex-col overflow-hidden rounded-3xl bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[15px_15px_35px_rgba(163,177,198,0.7),-15px_-15px_35px_rgba(255,255,255,0.9)] ${containerClassName || ""}`
+              : "fixed bottom-24 right-6 z-50 flex h-130 w-95 flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[12px_12px_28px_rgba(163,177,198,0.6),-12px_-12px_28px_rgba(255,255,255,0.9)] sm:w-105"
           }
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border bg-primary/5 px-4 py-3">
+          <div className="flex items-center justify-between border-b border-black/5 bg-gradient-to-r from-[#ececef] to-[#e8e8eb] px-4 py-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-                <Bot className="h-4 w-4 text-primary" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[4px_4px_10px_rgba(163,177,198,0.5),-4px_-4px_10px_rgba(255,255,255,0.9)]">
+                <Bot className="h-4 w-4 text-emerald-600" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold">Citizen Copilot</h3>
-                <p className="text-[11px] text-muted-foreground">
+                <h3 className="text-sm font-semibold text-slate-700">Citizen Copilot</h3>
+                <p className="text-[11px] text-slate-500">
                   Ask about schemes &amp; benefits
                 </p>
               </div>
@@ -275,26 +275,28 @@ export default function Chatbot({ mode = "floating", containerClassName }: Chatb
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8"
+              className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[3px_3px_8px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.9)] hover:shadow-[inset_2px_2px_5px_rgba(163,177,198,0.3)] active:shadow-[inset_3px_3px_6px_rgba(163,177,198,0.4)]"
               onClick={handleReset}
               title="Reset conversation"
             >
-              <RotateCcw className="h-4 w-4" />
+              <RotateCcw className="h-4 w-4 text-slate-600" />
             </Button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 bg-gradient-to-b from-[#e8e8eb] to-[#f0f0f3]">
             {loading ? (
               <div className="flex h-full items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <Loader2 className="h-6 w-6 animate-spin text-slate-500" />
               </div>
             ) : messages.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center gap-3 text-center text-muted-foreground">
-                <Bot className="h-10 w-10 text-primary/30" />
+              <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[inset_5px_5px_12px_rgba(163,177,198,0.4),inset_-5px_-5px_12px_rgba(255,255,255,0.9)] flex items-center justify-center">
+                  <Bot className="h-8 w-8 text-emerald-600" />
+                </div>
                 <div>
-                  <p className="text-sm font-medium">Hi there! 👋</p>
-                  <p className="text-xs mt-1">
+                  <p className="text-sm font-medium text-slate-700">Hi there! 👋</p>
+                  <p className="text-xs mt-1 text-slate-500">
                     Ask me about government schemes, upload documents,
                     <br />
                     or let me help you find eligible benefits.
@@ -312,7 +314,7 @@ export default function Chatbot({ mode = "floating", containerClassName }: Chatb
                         setInput(q);
                         inputRef.current?.focus();
                       }}
-                      className="rounded-full border border-border px-3 py-1 text-[11px] transition-colors hover:bg-primary/5 hover:border-primary/30"
+                      className="rounded-full px-3 py-1.5 text-[11px] transition-all bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] text-slate-700 shadow-[4px_4px_10px_rgba(163,177,198,0.4),-4px_-4px_10px_rgba(255,255,255,0.9)] hover:shadow-[2px_2px_6px_rgba(163,177,198,0.4),-2px_-2px_6px_rgba(255,255,255,0.9)] active:shadow-[inset_3px_3px_6px_rgba(163,177,198,0.3)]"
                     >
                       {q}
                     </button>
@@ -320,104 +322,115 @@ export default function Chatbot({ mode = "floating", containerClassName }: Chatb
                 </div>
               </div>
             ) : (
-              messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${
-                    msg.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
+              <>
+                {messages.map((msg) => (
                   <div
-                    className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-br-md"
-                        : "bg-muted rounded-bl-md"
+                    key={msg.id}
+                    className={`flex ${
+                      msg.role === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
-                    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                      {msg.content}
-                    </ReactMarkdown>
-                    {msg.attachments && msg.attachments.length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        {msg.attachments.map((att) => (
-                          <div
-                            key={att.document_id}
-                            className="flex items-center gap-1 text-[11px] opacity-75"
-                          >
-                            <FileText className="h-3 w-3" />
-                            <span>{att.filename}</span>
-                          </div>
-                        ))}
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+                        msg.role === "user"
+                          ? "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-[5px_5px_12px_rgba(16,185,129,0.4),-3px_-3px_8px_rgba(255,255,255,0.1)]"
+                          : "bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] text-slate-700 shadow-[6px_6px_14px_rgba(163,177,198,0.5),-5px_-5px_12px_rgba(255,255,255,0.9)]"
+                      }`}
+                    >
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                        {msg.content}
+                      </ReactMarkdown>
+                      {msg.attachments && msg.attachments.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          {msg.attachments.map((att) => (
+                            <div
+                              key={att.document_id}
+                              className="flex items-center gap-1 text-[11px] opacity-75"
+                            >
+                              <FileText className="h-3 w-3" />
+                              <span>{att.filename}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {sending && (
+                  <div className="flex justify-start">
+                    <div className="rounded-2xl px-4 py-3 bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[6px_6px_14px_rgba(163,177,198,0.5),-5px_-5px_12px_rgba(255,255,255,0.9)]">
+                      <div className="flex gap-1.5">
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-gradient-to-br from-slate-400 to-slate-500 shadow-[2px_2px_4px_rgba(100,116,139,0.3)] [animation-delay:0ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-gradient-to-br from-slate-400 to-slate-500 shadow-[2px_2px_4px_rgba(100,116,139,0.3)] [animation-delay:150ms]" />
+                        <span className="h-2 w-2 animate-bounce rounded-full bg-gradient-to-br from-slate-400 to-slate-500 shadow-[2px_2px_4px_rgba(100,116,139,0.3)] [animation-delay:300ms]" />
                       </div>
-                    )}
+                    </div>
                   </div>
-                </div>
-              ))
-            )}
-
-            {sending && (
-              <div className="flex justify-start">
-                <div className="rounded-2xl rounded-bl-md bg-muted px-4 py-3">
-                  <div className="flex gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:0ms]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:150ms]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-muted-foreground/50 [animation-delay:300ms]" />
-                  </div>
-                </div>
-              </div>
+                )}
+              </>
             )}
 
             <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-border px-3 py-2">
-            <div className="flex items-end gap-2">
-              {/* File Upload */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                className="hidden"
-                accept=".pdf,.txt,.md,.docx,.xlsx,.pptx,.csv,.json,.jpg,.jpeg,.png"
-                onChange={handleFileUpload}
-              />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 shrink-0"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading || !threadId}
-                title="Upload document"
-              >
-                {uploading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Paperclip className="h-4 w-4" />
-                )}
-              </Button>
+          <div className="border-t border-black/5 bg-gradient-to-r from-[#ececef] to-[#e8e8eb] px-3 py-3">
+            <div className="rounded-2xl p-2.5 bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb] shadow-[8px_8px_16px_rgba(163,177,198,0.5),-8px_-8px_16px_rgba(255,255,255,0.9),inset_1px_1px_2px_rgba(255,255,255,0.3)]">
+              <div className="flex items-end gap-2">
+                {/* File Upload */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  className="hidden"
+                  accept=".pdf,.txt,.md,.docx,.xlsx,.pptx,.csv,.json,.jpg,.jpeg,.png"
+                  onChange={handleFileUpload}
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 shrink-0 rounded-xl bg-[#e8e8eb] shadow-[4px_4px_8px_rgba(163,177,198,0.4),-4px_-4px_8px_rgba(255,255,255,0.9)] hover:bg-[#e8e8eb] active:shadow-[inset_3px_3px_6px_rgba(163,177,198,0.4)]"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading || !threadId}
+                  title="Upload document"
+                >
+                  {uploading ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Paperclip className="h-3.5 w-3.5" />
+                  )}
+                </Button>
 
-              {/* Text Input */}
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask about schemes..."
-                rows={1}
-                className="flex-1 resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                style={{ maxHeight: "100px", minHeight: "36px" }}
-                disabled={sending || !threadId}
-              />
+                {/* Text Input */}
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask about schemes..."
+                  rows={1}
+                  className="flex-1 resize-none rounded-xl border-none bg-[#e8e8eb] px-3 py-2 text-sm placeholder:text-slate-400 shadow-[inset_4px_4px_8px_rgba(163,177,198,0.4),inset_-4px_-4px_8px_rgba(255,255,255,0.9)] focus:outline-none focus:shadow-[inset_6px_6px_10px_rgba(163,177,198,0.5),inset_-3px_-3px_8px_rgba(255,255,255,1)] transition-all"
+                  style={{ maxHeight: "100px", minHeight: "32px" }}
+                  disabled={sending || !threadId}
+                />
 
-              {/* Send */}
-              <Button
-                size="icon"
-                className="h-9 w-9 shrink-0"
-                onClick={handleSend}
-                disabled={!input.trim() || sending || !threadId}
-              >
-                <Send className="h-4 w-4" />
-              </Button>
+                {/* Send */}
+                <Button
+                  size="icon"
+                  className="h-8 w-8 shrink-0 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-[4px_4px_8px_rgba(16,185,129,0.4),-2px_-2px_6px_rgba(255,255,255,0.5)] active:shadow-[inset_3px_3px_6px_rgba(16,185,129,0.3)] transition-all"
+                  onClick={handleSend}
+                  disabled={!input.trim() || sending || !threadId}
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-1 mt-1.5 opacity-50">
+              <span className="text-[9px] text-slate-500">Powered by</span>
+              <img 
+                src="https://framerusercontent.com/images/B1pu30dG18pgu4LBa9DzkcdS3Q.png?scale-down-to=512&width=627&height=78" 
+                alt="Logo" 
+                className="h-2.5 object-contain"
+              />
             </div>
           </div>
         </div>

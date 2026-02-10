@@ -241,10 +241,10 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
   const allCaptured = Object.keys(capturedImages).length === POSES.length;
 
   return (
-    <Card className="neo-card">
+    <Card className="neo-elevated-lg rounded-2xl border-0">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Camera className="h-5 w-5 text-primary" />
+        <CardTitle className="flex items-center gap-2 text-foreground">
+          <Camera className="h-5 w-5 text-emerald-600" />
           Face Verification - Auto Capture
         </CardTitle>
         <Progress value={progress} className="mt-2 h-2" />
@@ -261,7 +261,7 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
             transition={{ type: "spring", stiffness: 300 }}
             className={`flex items-center gap-1.5 text-sm transition-colors ${
               capturedImages["front"]
-                ? "text-green-600"
+                ? "text-emerald-600"
                 : "font-semibold text-primary"
             }`}
           >
@@ -286,13 +286,13 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
         {!allCaptured && (
           <div className="flex justify-center gap-6 text-sm">
             <div className={`flex items-center gap-2 transition-colors ${
-              hasMovedLeft ? "text-green-600 font-semibold" : "text-muted-foreground"
+              hasMovedLeft ? "text-emerald-600 font-semibold" : "text-muted-foreground"
             }`}>
               {hasMovedLeft ? <CheckCircle2 className="h-4 w-4" /> : <span className="h-4 w-4 rounded-full border-2 border-current" />}
               Turn Left
             </div>
             <div className={`flex items-center gap-2 transition-colors ${
-              hasMovedRight ? "text-green-600 font-semibold" : "text-muted-foreground"
+              hasMovedRight ? "text-emerald-600 font-semibold" : "text-muted-foreground"
             }`}>
               {hasMovedRight ? <CheckCircle2 className="h-4 w-4" /> : <span className="h-4 w-4 rounded-full border-2 border-current" />}
               Turn Right
@@ -448,7 +448,7 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
               <motion.p 
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-xs text-orange-600 font-medium"
+                className="text-xs text-emerald-600 font-medium"
               >
                 Loading face detection AI models...
               </motion.p>
@@ -457,7 +457,7 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
               <motion.p 
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-xs text-orange-600 font-medium"
+                className="text-xs text-emerald-600 font-medium"
               >
                 Initializing camera...
               </motion.p>
@@ -482,3 +482,4 @@ export default function FaceCapture({ onComplete }: FaceCaptureProps) {
     </Card>
   );
 }
+

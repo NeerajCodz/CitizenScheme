@@ -28,6 +28,7 @@ export interface Scheme {
   icon: string | null;
   created_by: string | null; // user id or org id
   scheme_type: 'government' | 'private'; // government = redirect, private = our form
+  application_form_fields: ApplicationFormField[];
   created_at: string;
   updated_at: string;
 }
@@ -38,14 +39,43 @@ export interface SchemeRecommendation extends Scheme {
   missing_criteria: string[];
 }
 
+export interface ApplicationFormField {
+  id: string;
+  type: 'text' | 'textarea' | 'file' | 'select' | 'date' | 'number' | 'checkbox';
+  label: string;
+  required: boolean;
+  placeholder?: string;
+  options?: string[]; // for select/checkbox
+  validation?: {
+    min?: number;
+    max?: number;
+    maxSize?: number; // for file uploads in MB
+    accept?: string; // file types
+  };
+}
+
 export interface SchemeApplication {
   id: string;
   user_id: string;
   scheme_id: string;
-  status: "pending" | "approved" | "rejected" | "in_review";
+  status: "pending" | "approved" | "rejected" | "under_review";
   eligibility_score: number;
   eligibility_details: Record<string, boolean>;
-  applied_at: string;
+  form_responses: Record<string, string | number | boolean>;
+  documents: { url: string; name: string; field_id: string }[];
+  reviewed_by: string | null;
+  review_notes: string | null;
   reviewed_at: string | null;
-  reviewer_notes: string | null;
+  applied_at: string;
+  updated_at: string;
+  // Joined data
+  schemes?: Scheme;
+  user_profiles?: {
+    id: string;
+    full_name: string | null;
+    email: string | null;
+    phone: string | null;
+    state: string | null;
+    avatar_url: string | null;
+  };
 }

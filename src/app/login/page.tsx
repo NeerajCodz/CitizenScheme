@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Shield, Loader2, ArrowRight, Building2, User, Sparkles, FileSearch, ScanFace, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -45,21 +46,21 @@ export default function LoginPage() {
 
   // Hero content panel
   const HeroPanel = ({ forOrg = false }: { forOrg?: boolean }) => (
-    <div className="flex h-full flex-col justify-center p-8 lg:p-16">
+    <div className="flex h-full flex-col justify-center p-8 lg:p-16 bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb]">
       <Link href="/" className="mb-8 inline-flex items-center gap-2">
-        <div className="neo-convex flex h-10 w-10 items-center justify-center rounded-xl">
-          <Shield className="h-5 w-5 text-primary" />
+        <div className="neo-elevated flex h-10 w-10 items-center justify-center rounded-xl">
+          <Shield className="h-5 w-5 text-emerald-600" />
         </div>
-        <span className="text-xl font-bold tracking-tight">Citizen Copilot</span>
+        <span className="text-xl font-bold tracking-tight text-slate-700">Citizen Copilot</span>
       </Link>
 
-      <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl">
+      <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl text-slate-700">
         {forOrg
-          ? <>Empower Citizens Through <span className="text-primary/70">Your Schemes</span></>
-          : <>Discover Government Benefits <span className="text-primary/70">You Deserve</span></>
+          ? <>Empower Citizens Through <span className="text-emerald-600">Your Schemes</span></>
+          : <>Discover Government Benefits <span className="text-emerald-600">You Deserve</span></>
         }
       </h1>
-      <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
+      <p className="mt-4 text-slate-600 leading-relaxed max-w-md">
         {forOrg
           ? "Register your organization, propose welfare schemes, and help citizens find benefits they qualify for."
           : "Upload your ID, verify your identity, and let our AI engine match you with every government welfare scheme you're eligible for."
@@ -69,12 +70,12 @@ export default function LoginPage() {
       <div className="mt-10 space-y-4">
         {(forOrg ? orgFeatures : heroFeatures).map((f) => (
           <div key={f.title} className="flex items-start gap-3">
-            <div className="neo-convex flex h-9 w-9 shrink-0 items-center justify-center rounded-lg mt-0.5">
-              <f.icon className="h-4 w-4 text-primary" />
+            <div className="neo-elevated flex h-9 w-9 shrink-0 items-center justify-center rounded-lg mt-0.5">
+              <f.icon className="h-4 w-4 text-emerald-600" />
             </div>
             <div>
-              <p className="font-medium text-sm">{f.title}</p>
-              <p className="text-xs text-muted-foreground">{f.desc}</p>
+              <p className="font-medium text-sm text-slate-700">{f.title}</p>
+              <p className="text-xs text-slate-600">{f.desc}</p>
             </div>
           </div>
         ))}
@@ -84,17 +85,17 @@ export default function LoginPage() {
 
   // Login form panel
   const LoginPanel = ({ isOrg = false }: { isOrg?: boolean }) => (
-    <div className="flex h-full flex-col items-center justify-center p-8 lg:p-16">
+    <div className="flex h-full flex-col items-center justify-center p-8 lg:p-16 bg-gradient-to-br from-[#e8e8eb] to-[#f0f0f3]">
       <div className="w-full max-w-sm">
-        <div className="neo-card p-8">
+        <div className="neo-elevated-lg p-8 rounded-3xl">
           <div className="mb-6 text-center">
-            <div className="neo-convex mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
-              {isOrg ? <Building2 className="h-7 w-7 text-primary" /> : <User className="h-7 w-7 text-primary" />}
+            <div className="neo-inset mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
+              {isOrg ? <Building2 className="h-7 w-7 text-emerald-600" /> : <User className="h-7 w-7 text-emerald-600" />}
             </div>
-            <h2 className="text-xl font-bold">
+            <h2 className="text-xl font-bold text-slate-700">
               {isOrg ? "Organization Login" : "Welcome Back"}
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-sm text-slate-600">
               {isOrg
                 ? "Sign in to manage your organization and schemes."
                 : "Sign in to discover government benefits you're eligible for."
@@ -105,7 +106,7 @@ export default function LoginPage() {
           <Button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="neo-btn w-full h-12 rounded-xl font-medium text-foreground bg-transparent hover:bg-transparent"
+            className="neo-elevated w-full h-12 rounded-xl font-medium text-slate-700 hover:neo-elevated-sm transition-all"
             variant="ghost"
             size="lg"
           >
@@ -122,7 +123,7 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Continue with Google"}
           </Button>
 
-          <p className="mt-4 text-center text-xs text-muted-foreground">
+          <p className="mt-4 text-center text-xs text-slate-500">
             By signing in you agree to our terms. Your data is securely stored and never shared.
           </p>
         </div>
@@ -130,7 +131,7 @@ export default function LoginPage() {
         {/* Toggle mode */}
         <button
           onClick={() => setMode(isOrg ? "user" : "org")}
-          className="mt-6 flex w-full items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="mt-6 flex w-full items-center justify-center gap-2 text-sm text-slate-600 transition-all hover:text-slate-700 neo-elevated-sm rounded-xl p-3 hover:neo-inset-sm"
         >
           {isOrg ? (
             <>
@@ -146,8 +147,8 @@ export default function LoginPage() {
           <ArrowRight className="h-3 w-3" />
         </button>
 
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-foreground underline-offset-4 hover:underline">
+        <p className="mt-4 text-center text-sm text-slate-600">
+          <Link href="/" className="hover:text-emerald-600 underline-offset-4 hover:underline transition-colors">
             &larr; Back to home
           </Link>
         </p>
@@ -156,7 +157,8 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="flex min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
+    <div className="flex min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
+      <div className="fixed top-4 right-4 z-50"><ThemeToggle /></div>
       <AnimatePresence mode="wait">
         {mode === "user" ? (
           <motion.div
@@ -168,7 +170,7 @@ export default function LoginPage() {
             transition={{ duration: 0.35 }}
           >
             {/* Left: Hero content */}
-            <div className="hidden lg:flex lg:w-1/2 border-r border-white/60 bg-white/50 backdrop-blur-xl">
+            <div className="hidden lg:flex lg:w-1/2 border-r border-black/5">
               <HeroPanel />
             </div>
             {/* Right: Login form */}
@@ -190,7 +192,7 @@ export default function LoginPage() {
               <LoginPanel isOrg />
             </div>
             {/* Right: Hero content (for org) */}
-            <div className="hidden lg:flex lg:w-1/2 border-l border-white/60 bg-white/50 backdrop-blur-xl">
+            <div className="hidden lg:flex lg:w-1/2 border-l border-black/5">
               <HeroPanel forOrg />
             </div>
           </motion.div>

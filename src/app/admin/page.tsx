@@ -49,7 +49,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
       </div>
     );
   }
@@ -65,7 +65,7 @@ export default function AdminDashboard() {
       title: "Verified Users",
       value: stats?.verifiedUsers ?? 0,
       icon: TrendingUp,
-      color: "text-green-600",
+      color: "text-emerald-600",
     },
     {
       title: "Active Schemes",
@@ -77,26 +77,26 @@ export default function AdminDashboard() {
       title: "Applications",
       value: stats?.totalApplications ?? 0,
       icon: ClipboardList,
-      color: "text-orange-600",
+      color: "text-amber-600",
     },
   ];
 
   return (
     <div className="p-6">
-      <h1 className="mb-6 text-2xl font-bold">Dashboard</h1>
+      <h1 className="mb-6 text-2xl font-bold text-foreground">Dashboard</h1>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
-          <Card key={c.title}>
+          <div key={c.title} className="neo-elevated-lg rounded-2xl">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
+              <CardTitle className="text-sm font-medium text-slate-500">
                 {c.title}
               </CardTitle>
               <c.icon className={`h-5 w-5 ${c.color}`} />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">{c.value}</div>
+              <div className="text-3xl font-bold text-foreground">{c.value}</div>
             </CardContent>
-          </Card>
+          </div>
         ))}
       </div>
     </div>

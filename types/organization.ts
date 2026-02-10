@@ -7,13 +7,22 @@ export interface Organization {
   description: string | null;
   work_email: string;
   logo_url: string | null;
+  banner_url: string | null;
   website: string | null;
   address: string | null;
   state: string | null;
   district: string | null;
   verified: boolean; // admin-approved
+  settings: OrgSettings;
   created_at: string;
   updated_at: string;
+}
+
+export interface OrgSettings {
+  notification_email?: boolean;
+  notification_inapp?: boolean;
+  primary_color?: string;
+  auto_approve?: boolean;
 }
 
 export interface OrgSchemeRequest {

@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { scheme_id } = body;
+    const { scheme_id, form_responses, documents } = body;
 
     if (!scheme_id) {
       return NextResponse.json(
@@ -59,6 +59,8 @@ export async function POST(request: NextRequest) {
         status: "pending",
         eligibility_score: body.eligibility_score || 0,
         eligibility_details: body.eligibility_details || {},
+        form_responses: form_responses || {},
+        documents: documents || [],
       })
       .select()
       .single();
@@ -93,7 +95,7 @@ export async function GET() {
 
     const { data, error } = await supabase
       .from("scheme_applications")
-      .select("*, schemes(*)")
+      .select("*, schemes(id, scheme_name, slug, scheme_type, category, department, created_by)")
       .eq("user_id", user.id)
       .order("applied_at", { ascending: false });
 

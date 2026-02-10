@@ -174,14 +174,14 @@ export function ChatbotButton() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="absolute inset-0 rounded-full bg-green-500/70 blur-md"
+              className="absolute inset-0 rounded-full bg-emerald-500/70 blur-md"
             />
           )}
           
           <Button
             onClick={() => setIsOpen(!isOpen)}
             size="lg"
-            className="relative h-16 w-16 rounded-full neo-flat hover:neo-pressed transition-all shadow-xl bg-green-600 hover:bg-green-700 border-2 border-white/20"
+            className="relative h-16 w-16 rounded-full neo-elevated hover:neo-inset transition-all shadow-xl bg-emerald-600 hover:bg-emerald-700 border-2 border-white/20"
           >
             <AnimatePresence mode="wait">
               {isOpen ? (
@@ -208,7 +208,7 @@ export function ChatbotButton() {
                   <motion.div
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
-                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-white"
+                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-emerald-500 border-2 border-white"
                   />
                 </motion.div>
               )}
@@ -227,9 +227,9 @@ export function ChatbotButton() {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="fixed bottom-24 right-4 z-40 w-[min(420px,calc(100vw-2rem))]"
           >
-            <div className="neo-flat rounded-3xl overflow-hidden shadow-2xl border-2 border-white/50">
+            <div className="neo-elevated rounded-3xl overflow-hidden shadow-2xl border-2 border-white/50 dark:border-white/10">
               {/* Header */}
-              <div className="bg-gradient-to-r from-green-600 via-green-600 to-green-700 p-4 text-white">
+              <div className="bg-gradient-to-r from-emerald-600 via-emerald-600 to-teal-700 p-4 text-white">
                 <div className="flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, 10, -10, 0] }}
@@ -253,7 +253,7 @@ export function ChatbotButton() {
               <div
                 ref={scrollContainerRef}
                 onScroll={handleScroll}
-                className="max-h-[calc(100vh-20rem)] overflow-y-auto p-4 bg-gradient-to-b from-green-50/40 to-background space-y-4 neo-scrollbar"
+                className="max-h-[calc(100vh-20rem)] overflow-y-auto p-4 bg-gradient-to-b from-emerald-50/40 dark:from-emerald-900/10 to-background space-y-4 neo-scrollbar"
               >
                 {loading && (
                   <div className="text-center text-sm text-muted-foreground">
@@ -271,8 +271,8 @@ export function ChatbotButton() {
                     <div
                       className={`h-8 w-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                         msg.role === "assistant"
-                          ? "bg-gradient-to-br from-green-500 to-green-700"
-                          : "bg-gradient-to-br from-emerald-500 to-emerald-600 neo-flat"
+                          ? "bg-gradient-to-br from-emerald-500 to-emerald-700"
+                          : "bg-gradient-to-br from-emerald-500 to-emerald-600 neo-elevated"
                       }`}
                     >
                       {msg.role === "assistant" ? (
@@ -284,7 +284,7 @@ export function ChatbotButton() {
                     <div
                       className={`max-w-[75%] rounded-2xl p-3 ${
                         msg.role === "assistant"
-                          ? "neo-flat rounded-tl-none"
+                          ? "neo-elevated rounded-tl-none"
                           : "bg-gradient-to-br from-emerald-500 to-emerald-600 text-white rounded-tr-none shadow-md"
                       }`}
                     >
@@ -301,10 +301,10 @@ export function ChatbotButton() {
                     animate={{ opacity: 1 }}
                     className="flex gap-3"
                   >
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center">
                       <Bot className="h-5 w-5 text-white" />
                     </div>
-                    <div className="neo-flat rounded-2xl rounded-tl-none p-3">
+                    <div className="neo-elevated rounded-2xl rounded-tl-none p-3">
                       <div className="flex gap-1">
                         {[0, 1, 2].map((i) => (
                           <motion.div
@@ -315,7 +315,7 @@ export function ChatbotButton() {
                               repeat: Infinity,
                               delay: i * 0.2,
                             }}
-                            className="h-2 w-2 rounded-full bg-green-600"
+                            className="h-2 w-2 rounded-full bg-emerald-600"
                           />
                         ))}
                       </div>
@@ -326,7 +326,7 @@ export function ChatbotButton() {
               </div>
 
               {/* Quick Actions */}
-              <div className="p-3 bg-green-50/40 border-t flex gap-2 overflow-x-auto">
+              <div className="p-3 bg-emerald-50/40 dark:bg-emerald-900/10 border-t border-white/40 dark:border-white/10 flex gap-2 overflow-x-auto">
                 {quickActions.map((action) => (
                   <motion.button
                     key={action.label}
@@ -335,7 +335,7 @@ export function ChatbotButton() {
                     onClick={() => {
                       handleSend(action.label);
                     }}
-                    className="flex-shrink-0 px-3 py-2 rounded-xl neo-flat text-xs font-medium hover:neo-pressed transition-all"
+                    className="flex-shrink-0 px-3 py-2 rounded-xl neo-elevated text-xs font-medium hover:neo-inset transition-all"
                   >
                     <span className="mr-1">{action.icon}</span>
                     {action.label}
@@ -344,7 +344,7 @@ export function ChatbotButton() {
               </div>
 
               {/* Input */}
-              <div className="p-4 bg-white border-t">
+              <div className="p-4 bg-[#f0f0f3] dark:bg-[hsl(240,10%,12%)] border-t border-white/40 dark:border-white/10">
                 <div className="flex gap-2">
                   <Textarea
                     value={input}
@@ -356,7 +356,7 @@ export function ChatbotButton() {
                       }
                     }}
                     placeholder={t("chatbot.placeholder", { defaultValue: "Type your message..." })}
-                    className="resize-none rounded-2xl neo-pressed border-0 focus-visible:ring-2 focus-visible:ring-green-600"
+                    className="resize-none rounded-2xl neo-inset border-0 focus-visible:ring-2 focus-visible:ring-emerald-600"
                     rows={2}
                   />
                   <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
@@ -364,7 +364,7 @@ export function ChatbotButton() {
                       onClick={() => handleSend()}
                       size="icon"
                       disabled={sending || loading || !threadId}
-                      className="h-full rounded-2xl bg-gradient-to-br from-green-600 to-green-700 hover:from-green-600 hover:to-green-800 shadow-lg"
+                      className="h-full rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-700 hover:from-emerald-600 hover:to-emerald-800 shadow-lg"
                     >
                       <Send className="h-5 w-5" />
                     </Button>

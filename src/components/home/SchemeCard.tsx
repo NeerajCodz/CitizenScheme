@@ -53,28 +53,23 @@ export function SchemeCard({ scheme, index }: SchemeCardProps) {
         <motion.div
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3 }}
-          className="group h-full p-6 neo-flat hover:neo-convex rounded-2xl transition-all duration-300 relative overflow-hidden"
+          className="group h-full p-6 neo-elevated hover:neo-elevated-lg rounded-2xl transition-all duration-300 relative overflow-hidden"
         >
-          {/* Animated Corner Accent */}
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1, opacity: 1 }}
-            className="absolute top-0 right-0 w-20 h-20 bg-linear-to-br from-primary/20 to-transparent rounded-bl-full -z-10"
-          />
+          {/* Animated Corner Accent - removed for clean neomorphism */}
 
           <div className="space-y-4">
             {/* Header with Icon */}
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1">
-                <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                <h3 className="text-base font-bold text-slate-700 group-hover:text-emerald-600 transition-colors line-clamp-2 mb-2">
                   {name}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
                     {category}
                   </Badge>
                   {state && (
-                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                    <Badge variant="outline" className="text-xs flex items-center gap-1 border-slate-300 text-slate-600">
                       <MapPin className="w-3 h-3" />
                       {state}
                     </Badge>
@@ -85,19 +80,19 @@ export function SchemeCard({ scheme, index }: SchemeCardProps) {
                 whileHover={{ rotate: 15, scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
-                <FileText className="w-5 h-5 text-primary/60 shrink-0" />
+                <FileText className="w-5 h-5 text-emerald-600 shrink-0" />
               </motion.div>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-muted-foreground line-clamp-3">
+            <p className="text-sm text-slate-600 line-clamp-3">
               {description}
             </p>
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-border/50">
+            <div className="flex items-center justify-between pt-2 border-t border-slate-200">
               {department && (
-                <p className="text-xs text-muted-foreground line-clamp-1 flex-1">
+                <p className="text-xs text-slate-600 line-clamp-1 flex-1">
                   {department}
                 </p>
               )}
@@ -111,21 +106,16 @@ export function SchemeCard({ scheme, index }: SchemeCardProps) {
                   }}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-1.5 hover:bg-primary/10 rounded-md transition-colors"
+                  className="neo-inset p-1.5 rounded-md transition-all"
                   aria-label="Visit official website"
                 >
-                  <ExternalLink className="w-4 h-4 text-primary" />
+                  <ExternalLink className="w-4 h-4 text-emerald-600" />
                 </motion.button>
               )}
             </div>
           </div>
 
-          {/* Hover Glow Effect */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
-            className="absolute -inset-0.5 bg-gradient-to-r from-orange-500 to-green-500 rounded-2xl blur-sm -z-20"
-          />
+          {/* Hover Glow Effect - removed for neomorphism */}
         </motion.div>
       </Link>
     </motion.div>

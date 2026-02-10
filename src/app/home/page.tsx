@@ -120,18 +120,18 @@ export default function HomePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full"
+          className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full"
         />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-orange-50/40 via-background to-emerald-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-[#e8e8eb] via-[#f0f0f3] to-[#e8e8eb]">
       {/* Header Component */}
       <Header />
 
@@ -146,12 +146,12 @@ export default function HomePage() {
           >
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-1 h-8 bg-linear-to-b from-primary to-accent rounded-full" />
-                <h2 className="text-3xl font-bold text-foreground">
+                <div className="w-1 h-8 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
+                <h2 className="text-3xl font-bold text-slate-700">
                   {t("featured.title")}
                 </h2>
               </div>
-              <p className="text-muted-foreground ml-7">
+              <p className="text-slate-600 ml-7">
                 {t("featured.subtitle")}
               </p>
             </div>
@@ -161,17 +161,17 @@ export default function HomePage() {
                 variant="outline"
                 size="icon"
                 onClick={() => scrollFeatured("left")}
-                className="rounded-full"
+                className="neo-elevated rounded-full border-0 hover:neo-elevated-sm"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5 text-slate-700" />
               </Button>
               <Button
                 variant="outline"
                 size="icon"
                 onClick={() => scrollFeatured("right")}
-                className="rounded-full"
+                className="neo-elevated rounded-full border-0 hover:neo-elevated-sm"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-5 h-5 text-slate-700" />
               </Button>
             </div>
           </motion.div>
@@ -193,7 +193,7 @@ export default function HomePage() {
       </section>
 
       {/* Eligible Schemes */}
-      <section className="py-16 bg-linear-to-b from-white/40 via-orange-50/20 to-transparent">
+      <section className="py-16 bg-gradient-to-br from-[#f0f0f3] to-[#e8e8eb]">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -202,12 +202,12 @@ export default function HomePage() {
             className="mb-8"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-1 h-8 bg-gradient-to-b from-green-500 to-green-600 rounded-full" />
-              <h2 className="text-3xl font-bold text-foreground">
+              <div className="w-1 h-8 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
+              <h2 className="text-3xl font-bold text-slate-700">
                 {t("eligible.title")}
               </h2>
             </div>
-            <p className="text-muted-foreground ml-7">
+            <p className="text-slate-600 ml-7">
               {t("eligible.subtitle")}
             </p>
           </motion.div>
@@ -234,12 +234,12 @@ export default function HomePage() {
             className="mb-8"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-1 h-8 bg-gradient-to-b from-primary to-accent rounded-full" />
-              <h2 className="text-3xl font-bold text-foreground">
+              <div className="w-1 h-8 bg-gradient-to-b from-emerald-500 to-emerald-600 rounded-full" />
+              <h2 className="text-3xl font-bold text-slate-700">
                 {t("all.title")}
               </h2>
             </div>
-            <p className="text-muted-foreground ml-7">
+            <p className="text-slate-600 ml-7">
               {t("all.subtitle")}
             </p>
           </motion.div>

@@ -292,7 +292,7 @@ export default function AdminNotificationsPage() {
           {sentCount !== null && (
             <Card>
               <CardContent className="py-6 text-center">
-                <div className="text-3xl font-bold text-green-600">{sentCount}</div>
+                <div className="text-3xl font-bold text-emerald-600">{sentCount}</div>
                 <p className="text-sm text-muted-foreground mt-1">
                   Notifications sent successfully
                 </p>
@@ -304,3 +304,4 @@ export default function AdminNotificationsPage() {
     </div>
   );
 }
+
